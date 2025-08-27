@@ -1,40 +1,28 @@
 #!/usr/bin/env bun
-import {
-  altScreen,
-  ansi256Color,
-  ansiColor,
-  clearLine,
-  clearScreen,
-  colorProfile,
-  createHyperlink,
-  cursorDown,
-  cursorUp,
-  disableMouse,
-  enableMouse,
-  exitAltScreen,
-  hideCursor,
-  moveCursor,
-  noColor,
-  profileName,
-  rgbColor,
-  sendNotification,
-  setWindowTitle,
-  showCursor,
-  string,
-} from '../../../../src/index.js';
+import { 
+  string, rgbColor, ansiColor, ansi256Color, noColor,
+  colorProfile, profileName, clearScreen, moveCursor,
+  createHyperlink, sendNotification, altScreen, exitAltScreen,
+  hideCursor, showCursor, cursorUp, cursorDown, clearLine,
+  enableMouse, disableMouse, setWindowTitle
+} from '../../../dist/index.js';
 
 // Mock process.stdout.write to capture output
 const originalWrite = process.stdout.write;
 let capturedOutput = '';
-(process.stdout.write as any) = (chunk: any) => {
+(process.stdout.write as any) = function(chunk: any) {
   capturedOutput += chunk.toString();
   return true;
 };
 
 try {
-  const styled = string('No Colors Here').foreground(rgbColor('#FF0000')).bold().italic();
-  process.stdout.write(styled.toString());
-
+  
+        const styled = string('No Colors Here')
+          .foreground(rgbColor('#FF0000'))
+          .bold()
+          .italic();
+        process.stdout.write(styled.toString());
+        
   console.log(capturedOutput);
 } finally {
   process.stdout.write = originalWrite;

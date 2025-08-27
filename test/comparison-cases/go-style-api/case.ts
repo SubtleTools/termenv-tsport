@@ -1,21 +1,27 @@
 #!/usr/bin/env bun
-// biome-ignore lint/suspicious/noShadowRestrictedNames: Go API compatibility requires this name
-import { RGBColor, String } from '../../../../src/go-style.js';
+import { 
+  string, rgbColor, ansiColor, ansi256Color, noColor,
+  colorProfile, profileName, clearScreen, moveCursor,
+  createHyperlink, sendNotification, altScreen, exitAltScreen,
+  hideCursor, showCursor, cursorUp, cursorDown, clearLine,
+  enableMouse, disableMouse, setWindowTitle
+} from '../../../dist/index.js';
 
 // Mock process.stdout.write to capture output
 const originalWrite = process.stdout.write;
 let capturedOutput = '';
-// biome-ignore lint/suspicious/noExplicitAny: Test utility function requires any for stdout mock
-(process.stdout.write as any) = (chunk: string | Uint8Array) => {
+(process.stdout.write as any) = function(chunk: any) {
   capturedOutput += chunk.toString();
   return true;
 };
 
 try {
-  // Using TypeScript Go-style API
-  const styled = String('Go Style API').Foreground(RGBColor('#00FF00')).Bold();
-  process.stdout.write(styled.String());
-
+  
+        // Using TypeScript Go-style API
+        import { String, RGBColor } from '../../../../src/go-style.js';
+        const styled = String('Go Style API').Foreground(RGBColor('#00FF00')).Bold();
+        process.stdout.write(styled.String());
+        
   console.log(capturedOutput);
 } finally {
   process.stdout.write = originalWrite;

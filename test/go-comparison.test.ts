@@ -10,7 +10,7 @@ import {
   string,
 } from '#src/index.js';
 import { Profile } from '#src/types.js';
-import { compareOutputs, runTestCase } from '../../go-colorful/test/utils/comparison.js';
+import { compareOutputs, runTestCase } from '../../uniseg/test/utils/comparison.js';
 
 // Helper to create test cases
 function createTestCase(name: string, tsCode: string, goCode: string) {
@@ -29,7 +29,7 @@ import {
   createHyperlink, sendNotification, altScreen, exitAltScreen,
   hideCursor, showCursor, cursorUp, cursorDown, clearLine,
   enableMouse, disableMouse, setWindowTitle
-} from '../../../../src/index.js';
+} from '../../../dist/index.js';
 
 // Mock process.stdout.write to capture output
 const originalWrite = process.stdout.write;
