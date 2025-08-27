@@ -24,6 +24,7 @@ class MockWriter {
 }
 
 // Mock environment
+// biome-ignore lint/correctness/noUnusedVariables: Reserved for future testing
 class MockEnviron {
   constructor(private env: Record<string, string> = {}) {}
 

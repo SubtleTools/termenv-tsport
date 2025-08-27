@@ -281,7 +281,9 @@ describe('Terminal Control Features', () => {
 
       const result = mockWriter.getAllOutput();
       // Should have 20 sequences (10 forward, 10 back)
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: Testing ANSI escape sequences requires control characters
       const forwardCount = (result.match(/\x1b\[1C/g) || []).length;
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: Testing ANSI escape sequences requires control characters
       const backCount = (result.match(/\x1b\[1D/g) || []).length;
 
       expect(forwardCount).toBe(10);

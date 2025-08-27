@@ -286,6 +286,7 @@ describe('Complete Screen Control Coverage', () => {
       expect(sequences).toContain('\x1b8'); // Restore at end
 
       // Should have many cursor movement sequences
+      // biome-ignore lint/suspicious/noControlCharactersInRegex: Testing ANSI escape sequences requires control characters
       const moveCount = (sequences.match(/\x1b\[\d+;\d+H/g) || []).length;
       expect(moveCount).toBeGreaterThanOrEqual(10);
     });

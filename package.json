@@ -18,7 +18,7 @@
     "clean": "rm -rf dist",
     "dev": "bun tsc --project tsconfig.build.json --watch",
     "test": "bun test",
-    "lint": "biome check src test --no-errors-on-unmatched --write",
+    "lint": "biome check src test --no-errors-on-unmatched --write --diagnostic-level=error",
     "format": "biome format --write src test",
     "format:check": "dprint check",
     "docs": "typedoc",
