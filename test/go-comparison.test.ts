@@ -1,28 +1,28 @@
 import { describe, expect, test } from 'bun:test';
-import { runTestCase, compareOutputs, type ComparisonResult } from '../../go-colorful/test/utils/comparison.js';
-import { 
-  string, rgbColor, ansiColor, ansi256Color,
-  colorProfile, profileName, 
-  clearScreen, moveCursor, createHyperlink, sendNotification
-} from '#src/index.js';
-import {
-  String, RGBColor, ANSIColor, ANSI256Color,
-  ColorProfile, ProfileName,
-  ClearScreen, MoveCursor, Hyperlink
-} from '#src/go-style.js';
-import { Profile, NoColor } from '#src/types.js';
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import {
+  ansi256Color,
+  ansiColor,
+  colorProfile,
+  createHyperlink,
+  rgbColor,
+  string,
+} from '#src/index.js';
+import { Profile } from '#src/types.js';
+import { compareOutputs, runTestCase } from '../../go-colorful/test/utils/comparison.js';
 
 // Helper to create test cases
 function createTestCase(name: string, tsCode: string, goCode: string) {
   const testDir = join(import.meta.dir, 'comparison-cases', name);
-  
+
   try {
     mkdirSync(testDir, { recursive: true });
-    
+
     // Write TypeScript test case
-    writeFileSync(join(testDir, 'case.ts'), `#!/usr/bin/env bun
+    writeFileSync(
+      join(testDir, 'case.ts'),
+      `#!/usr/bin/env bun
 import { 
   string, rgbColor, ansiColor, ansi256Color, noColor,
   colorProfile, profileName, clearScreen, moveCursor,
@@ -45,10 +45,13 @@ try {
 } finally {
   process.stdout.write = originalWrite;
 }
-`);
-    
+`
+    );
+
     // Write Go test case
-    writeFileSync(join(testDir, 'case.go'), `package main
+    writeFileSync(
+      join(testDir, 'case.go'),
+      `package main
 
 import (
 	"fmt"
@@ -69,8 +72,9 @@ func main() {
 	${goCode}
 	fmt.Print(output.String())
 }
-`);
-    
+`
+    );
+
     return testDir;
   } catch (error) {
     console.warn(`Could not create test case ${name}:`, error);
@@ -95,9 +99,15 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, { COLORTERM: 'truecolor', TERM: 'xterm-256color' });
-          const goOutput = runTestCase(testCase, true, { COLORTERM: 'truecolor', TERM: 'xterm-256color' });
-          
+          const tsOutput = runTestCase(testCase, false, {
+            COLORTERM: 'truecolor',
+            TERM: 'xterm-256color',
+          });
+          const goOutput = runTestCase(testCase, true, {
+            COLORTERM: 'truecolor',
+            TERM: 'xterm-256color',
+          });
+
           const comparison = compareOutputs(tsOutput, goOutput);
           if (!comparison.match) {
             console.log('TS output:', JSON.stringify(tsOutput));
@@ -128,7 +138,7 @@ describe('Go Comparison Tests', () => {
         try {
           const tsOutput = runTestCase(testCase, false, { TERM: 'xterm-color' });
           const goOutput = runTestCase(testCase, true, { TERM: 'xterm-color' });
-          
+
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
         } catch (error) {
@@ -154,7 +164,7 @@ describe('Go Comparison Tests', () => {
         try {
           const tsOutput = runTestCase(testCase, false, { TERM: 'xterm-256color' });
           const goOutput = runTestCase(testCase, true, { TERM: 'xterm-256color' });
-          
+
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
         } catch (error) {
@@ -182,7 +192,7 @@ describe('Go Comparison Tests', () => {
         try {
           const tsOutput = runTestCase(testCase, false, { TERM: 'xterm-256color' });
           const goOutput = runTestCase(testCase, true, { TERM: 'xterm-256color' });
-          
+
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
         } catch (error) {
@@ -216,9 +226,15 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, { COLORTERM: 'truecolor', TERM: 'xterm-256color' });
-          const goOutput = runTestCase(testCase, true, { COLORTERM: 'truecolor', TERM: 'xterm-256color' });
-          
+          const tsOutput = runTestCase(testCase, false, {
+            COLORTERM: 'truecolor',
+            TERM: 'xterm-256color',
+          });
+          const goOutput = runTestCase(testCase, true, {
+            COLORTERM: 'truecolor',
+            TERM: 'xterm-256color',
+          });
+
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
         } catch (error) {
@@ -247,7 +263,7 @@ describe('Go Comparison Tests', () => {
         try {
           const tsOutput = runTestCase(testCase, false, { TERM: 'linux' }); // Forces ANSI profile
           const goOutput = runTestCase(testCase, true, { TERM: 'linux' });
-          
+
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
         } catch (error) {
@@ -279,7 +295,7 @@ describe('Go Comparison Tests', () => {
         try {
           const tsOutput = runTestCase(testCase, false, { TERM: 'dumb' }); // Forces ASCII profile
           const goOutput = runTestCase(testCase, true, { TERM: 'dumb' });
-          
+
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
         } catch (error) {
@@ -307,9 +323,15 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, { COLORTERM: 'truecolor', TERM: 'xterm-256color' });
-          const goOutput = runTestCase(testCase, true, { COLORTERM: 'truecolor', TERM: 'xterm-256color' });
-          
+          const tsOutput = runTestCase(testCase, false, {
+            COLORTERM: 'truecolor',
+            TERM: 'xterm-256color',
+          });
+          const goOutput = runTestCase(testCase, true, {
+            COLORTERM: 'truecolor',
+            TERM: 'xterm-256color',
+          });
+
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
         } catch (error) {
@@ -337,7 +359,7 @@ describe('Go Comparison Tests', () => {
         try {
           const tsOutput = runTestCase(testCase, false);
           const goOutput = runTestCase(testCase, true);
-          
+
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
         } catch (error) {
@@ -365,7 +387,7 @@ describe('Go Comparison Tests', () => {
         try {
           const tsOutput = runTestCase(testCase, false, { NO_COLOR: '1', TERM: 'xterm-256color' });
           const goOutput = runTestCase(testCase, true, { NO_COLOR: '1', TERM: 'xterm-256color' });
-          
+
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
         } catch (error) {
@@ -380,7 +402,7 @@ describe('Go Comparison Tests', () => {
     test('RGB color generates correct ANSI sequence', () => {
       const styled = string('Test').foreground(rgbColor('#FF6B35'));
       const output = styled.toString();
-      
+
       expect(output).toContain('Test');
       // In Ascii profile, colors are stripped
       if (colorProfile() !== Profile.Ascii) {
@@ -392,7 +414,7 @@ describe('Go Comparison Tests', () => {
     test('ANSI color generates correct sequence', () => {
       const styled = string('Test').foreground(ansiColor(9));
       const output = styled.toString();
-      
+
       expect(output).toContain('Test');
       // In Ascii profile, colors are stripped
       if (colorProfile() !== Profile.Ascii) {
@@ -403,7 +425,7 @@ describe('Go Comparison Tests', () => {
     test('ANSI256 color generates correct sequence', () => {
       const styled = string('Test').foreground(ansi256Color(196));
       const output = styled.toString();
-      
+
       expect(output).toContain('Test');
       // In Ascii profile, colors are stripped
       if (colorProfile() !== Profile.Ascii) {
@@ -414,7 +436,7 @@ describe('Go Comparison Tests', () => {
     test('bold styling generates correct sequence', () => {
       const styled = string('Test').bold();
       const output = styled.toString();
-      
+
       // In Ascii profile, styling is stripped but text remains
       expect(output).toContain('Test');
       // Styling may be stripped in ASCII profile
@@ -425,7 +447,7 @@ describe('Go Comparison Tests', () => {
 
     test('hyperlink generates correct OSC 8 format', () => {
       const link = createHyperlink('https://example.com', 'Test');
-      
+
       // OSC 8 format: \x1b]8;;URL\x1b\\TEXT\x1b]8;;\x1b\\
       expect(link).toBe('\x1b]8;;https://example.com\x1b\\Test\x1b]8;;\x1b\\');
     });
@@ -437,9 +459,9 @@ describe('Go Comparison Tests', () => {
         .bold()
         .italic()
         .underline();
-      
+
       const output = styled.toString();
-      
+
       // Check that styling was applied (sequences may be combined)
       expect(output).toContain('Complex');
       // In Ascii profile, styling is stripped
@@ -461,7 +483,7 @@ describe('Test Infrastructure', () => {
     const different = compareOutputs('hello', 'world');
     expect(different.match).toBe(false);
     expect(different.differences).toBeDefined();
-    expect(different.differences!.length).toBeGreaterThan(0);
+    expect(different.differences?.length).toBeGreaterThan(0);
   });
 
   test('test case creation works', () => {
@@ -470,7 +492,7 @@ describe('Test Infrastructure', () => {
       'console.log("typescript");',
       'fmt.Println("go")'
     );
-    
+
     expect(testDir).not.toBeNull();
     if (testDir) {
       expect(testDir).toContain('test-infrastructure');

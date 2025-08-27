@@ -1,3 +1,4 @@
+// biome-ignore lint/suspicious/noShadowRestrictedNames: Go API compatibility requires this name
 import { ANSIColor, RGBColor, String } from '../../../../src/go-style.js';
 
 // Test global convenience functions - using Go-style API exactly

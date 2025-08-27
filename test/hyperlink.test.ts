@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { hyperlink, HyperlinkControl } from '#src/hyperlink.js';
+import { HyperlinkControl, hyperlink } from '#src/hyperlink.js';
 import { newOutput } from '#src/output.js';
 
 // Mock writer for capturing output
@@ -52,7 +52,7 @@ describe('HyperlinkControl', () => {
     const hyperlinkControl = new HyperlinkControl(output);
 
     hyperlinkControl.hyperlink('https://example.com', 'Test Link');
-    
+
     expect(writer.output.length).toBe(1);
     expect(writer.output[0]).toBe('\x1b]8;;https://example.com\x1b\\Test Link\x1b]8;;\x1b\\');
   });
@@ -74,7 +74,7 @@ describe('HyperlinkControl', () => {
     hyperlinkControl
       .hyperlink('https://example.com', 'First Link')
       .hyperlink('https://github.com', 'Second Link');
-    
+
     expect(writer.output.length).toBe(2);
     expect(writer.output[0]).toBe('\x1b]8;;https://example.com\x1b\\First Link\x1b]8;;\x1b\\');
     expect(writer.output[1]).toBe('\x1b]8;;https://github.com\x1b\\Second Link\x1b]8;;\x1b\\');
@@ -86,7 +86,7 @@ describe('HyperlinkControl', () => {
     const hyperlinkControl = new HyperlinkControl(output);
 
     hyperlinkControl.hyperlink('', 'No Link');
-    
+
     expect(writer.output.length).toBe(1);
     expect(writer.output[0]).toBe('No Link');
   });

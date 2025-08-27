@@ -48,12 +48,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/SubtleTools/termenv-tsport"
+    "url": "https://github.com/TSports/termenv"
   },
   "bugs": {
-    "url": "https://github.com/SubtleTools/termenv-tsport/issues"
+    "url": "https://github.com/TSports/termenv/issues"
   },
-  "homepage": "https://github.com/SubtleTools/termenv-tsport#readme",
+  "homepage": "https://github.com/TSports/termenv#readme",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -84,8 +84,8 @@
     "./README.md": "./README.md"
   },
   "dependencies": {
-    "@tsports/go-colorful": "^1.2.0-tsport",
-    "@tsports/uniseg": "^0.4.7-tsport"
+    "@tsports/go-colorful": "workspace:*",
+    "@tsports/uniseg": "workspace:*"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.2",

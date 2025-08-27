@@ -97,7 +97,7 @@ describe('Basic Functionality', () => {
       if (originalForceColor !== undefined) {
         process.env.FORCE_COLOR = originalForceColor;
       } else {
-        delete process.env.FORCE_COLOR;
+        process.env.FORCE_COLOR = undefined;
       }
     }
   });

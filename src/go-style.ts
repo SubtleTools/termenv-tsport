@@ -89,35 +89,35 @@ export {
 
 // Import base functionality
 import {
+  altScreen as altScreenFunc,
   ansi256Color as ansi256ColorFunc,
   ansiColor as ansiColorFunc,
   backgroundColor as backgroundColorFunc,
+  clearLine as clearLineFunc,
+  clearScreen as clearScreenFunc,
   color as colorFunc,
   colorProfile as colorProfileFunc,
+  cursorDown as cursorDownFunc,
+  cursorUp as cursorUpFunc,
+  disableMouse as disableMouseFunc,
+  enableMouse as enableMouseFunc,
   envColorProfile as envColorProfileFunc,
   envNoColor as envNoColorFunc,
+  exitAltScreen as exitAltScreenFunc,
   foregroundColor as foregroundColorFunc,
   hasDarkBackground as hasDarkBackgroundFunc,
-  noColor as noColorFunc,
-  profileName as profileNameFunc,
-  rgbColor as rgbColorFunc,
-  string as stringFunc,
+  hideCursor as hideCursorFunc,
+  createHyperlink as hyperlinkFunc,
   // Screen control functions
   moveCursor as moveCursorFunc,
-  cursorUp as cursorUpFunc,
-  cursorDown as cursorDownFunc,
-  clearScreen as clearScreenFunc,
-  clearLine as clearLineFunc,
-  hideCursor as hideCursorFunc,
-  showCursor as showCursorFunc,
-  altScreen as altScreenFunc,
-  exitAltScreen as exitAltScreenFunc,
-  setWindowTitle as setWindowTitleFunc,
-  enableMouse as enableMouseFunc,
-  disableMouse as disableMouseFunc,
-  createHyperlink as hyperlinkFunc,
+  noColor as noColorFunc,
   createNotification as notificationFunc,
+  profileName as profileNameFunc,
+  rgbColor as rgbColorFunc,
   sendNotification as sendNotificationFunc,
+  setWindowTitle as setWindowTitleFunc,
+  showCursor as showCursorFunc,
+  string as stringFunc,
 } from './index.js';
 import type { OutputImpl } from './output.js';
 import { newOutput as newOutputFunc } from './output.js';
@@ -128,7 +128,9 @@ import type { Color as ColorInterface, OutputOption, Profile } from './types.js'
 
 /**
  * String returns a new styled string for the default output - matches Go String function
+ * Note: Using non-standard name to avoid shadowing global String
  */
+// biome-ignore lint/suspicious/noShadowRestrictedNames: Go API compatibility requires this name
 export function String(...strings: string[]): import('./style.js').Style {
   return stringFunc(...strings);
 }

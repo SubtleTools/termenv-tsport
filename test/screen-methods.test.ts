@@ -9,11 +9,11 @@ class MockWriter {
   write(data: Uint8Array | string, callback?: (err?: Error) => void): boolean {
     const text = typeof data === 'string' ? data : new TextDecoder().decode(data);
     this.output.push(text);
-    
+
     if (callback) {
       process.nextTick(() => callback());
     }
-    
+
     return true;
   }
 
@@ -44,10 +44,10 @@ describe('Screen Control Methods', () => {
     await output.disableMouse();
     await output.enableBracketedPaste();
     await output.disableBracketedPaste();
-    
+
     // Should have generated output
     expect(mockWriter.output.length).toBeGreaterThan(0);
-    
+
     // Check that some expected sequences are present
     const allOutput = mockWriter.output.join('');
     expect(allOutput.length).toBeGreaterThan(0);
@@ -58,7 +58,7 @@ describe('Screen Control Methods', () => {
     const output = newOutput(mockWriter as any);
 
     await output.notify('Test', 'Message');
-    
+
     expect(mockWriter.output.length).toBeGreaterThan(0);
     const output_text = mockWriter.output.join('');
     expect(output_text).toContain('777');
@@ -69,7 +69,7 @@ describe('Screen Control Methods', () => {
     const output = newOutput(mockWriter as any);
 
     await output.hyperlink('https://example.com', 'Link Text');
-    
+
     expect(mockWriter.output.length).toBeGreaterThan(0);
     const output_text = mockWriter.output.join('');
     expect(output_text).toContain('example.com');

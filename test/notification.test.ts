@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test';
-import { notify, NotificationControl } from '#src/notification.js';
+import { NotificationControl, notify } from '#src/notification.js';
 import { newOutput } from '#src/output.js';
 
 // Mock writer for capturing output
@@ -39,8 +39,8 @@ describe('notify function', () => {
   });
 
   test('handles long strings', () => {
-    const longTitle = 'Very '.repeat(50) + 'Long Title';
-    const longBody = 'Very '.repeat(100) + 'Long Body';
+    const longTitle = `${'Very '.repeat(50)}Long Title`;
+    const longBody = `${'Very '.repeat(100)}Long Body`;
     const result = notify(longTitle, longBody);
     expect(result).toBe(`\x1b]777;notify;${longTitle};${longBody}\x1b\\`);
   });
@@ -53,7 +53,7 @@ describe('NotificationControl', () => {
     const notificationControl = new NotificationControl(output);
 
     notificationControl.notify('Test Title', 'Test Body');
-    
+
     expect(writer.output.length).toBe(1);
     expect(writer.output[0]).toBe('\x1b]777;notify;Test Title;Test Body\x1b\\');
   });
@@ -72,10 +72,8 @@ describe('NotificationControl', () => {
     const output = newOutput(writer as any);
     const notificationControl = new NotificationControl(output);
 
-    notificationControl
-      .notify('First Title', 'First Body')
-      .notify('Second Title', 'Second Body');
-    
+    notificationControl.notify('First Title', 'First Body').notify('Second Title', 'Second Body');
+
     expect(writer.output.length).toBe(2);
     expect(writer.output[0]).toBe('\x1b]777;notify;First Title;First Body\x1b\\');
     expect(writer.output[1]).toBe('\x1b]777;notify;Second Title;Second Body\x1b\\');
@@ -87,7 +85,7 @@ describe('NotificationControl', () => {
     const notificationControl = new NotificationControl(output);
 
     notificationControl.notify('', '');
-    
+
     expect(writer.output.length).toBe(1);
     expect(writer.output[0]).toBe('\x1b]777;notify;;\x1b\\');
   });

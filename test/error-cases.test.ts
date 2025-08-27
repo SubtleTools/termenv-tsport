@@ -1,7 +1,14 @@
 import { describe, expect, test } from 'bun:test';
-import { InvalidColorError, StatusReportError, TermEnvError } from '#src/types.js';
 import { ProfileUtils } from '#src/profile.js';
-import { Profile, RGBColor, ANSIColor, ANSI256Color } from '#src/types.js';
+import {
+  ANSI256Color,
+  ANSIColor,
+  InvalidColorError,
+  Profile,
+  RGBColor,
+  StatusReportError,
+  TermEnvError,
+} from '#src/types.js';
 
 describe('Error Handling and Edge Cases', () => {
   describe('custom error classes', () => {
@@ -122,7 +129,7 @@ describe('Error Handling and Edge Cases', () => {
 
       for (const testCase of testCases) {
         const result = ProfileUtils.color(Profile.TrueColor, testCase);
-        
+
         if (testCase === 'Infinity' || testCase === '-Infinity' || testCase === 'NaN') {
           expect(result).toBe(null); // Should reject invalid number formats
         } else if (testCase === '1.5' || testCase === '1e2') {
@@ -144,7 +151,7 @@ describe('Error Handling and Edge Cases', () => {
         hex: '#INVALID',
         sequence: () => '38;2;0;0;0m',
         toString: () => '#INVALID',
-        parseHexLenient: () => null
+        parseHexLenient: () => null,
       } as any;
 
       // Should handle conversion gracefully
@@ -158,7 +165,7 @@ describe('Error Handling and Edge Cases', () => {
       // Test edge cases that might cause issues
       const edgeCases = [
         '#000000', // Pure black
-        '#FFFFFF', // Pure white  
+        '#FFFFFF', // Pure white
         '#FF0000', // Pure red
         '#00FF00', // Pure green
         '#0000FF', // Pure blue
@@ -171,15 +178,15 @@ describe('Error Handling and Edge Cases', () => {
 
       for (const hexColor of edgeCases) {
         const color = new RGBColor(hexColor);
-        
+
         // Test foreground sequence
         const fgSequence = color.sequence(false);
         expect(fgSequence).toMatch(/^38;2;\d{1,3};\d{1,3};\d{1,3}$/);
-        
+
         // Test background sequence
         const bgSequence = color.sequence(true);
         expect(bgSequence).toMatch(/^48;2;\d{1,3};\d{1,3};\d{1,3}$/);
-        
+
         // Test toString
         const str = color.toString();
         expect(str).toMatch(/^#[0-9a-fA-F]{6}$/);
@@ -188,15 +195,15 @@ describe('Error Handling and Edge Cases', () => {
 
     test('ANSIColor with edge values', () => {
       const testValues = [0, 1, 7, 8, 9, 15, -1, 16, 255];
-      
+
       for (const value of testValues) {
         const color = new ANSIColor(value);
         expect(color.value).toBe(value);
-        
+
         // Should always return a valid sequence
         const fgSequence = color.sequence(false);
         const bgSequence = color.sequence(true);
-        
+
         expect(typeof fgSequence).toBe('string');
         expect(typeof bgSequence).toBe('string');
         expect(fgSequence.length).toBeGreaterThan(0);
@@ -206,15 +213,15 @@ describe('Error Handling and Edge Cases', () => {
 
     test('ANSI256Color with edge values', () => {
       const testValues = [0, 15, 16, 231, 232, 255, 256, -1, 999];
-      
+
       for (const value of testValues) {
         const color = new ANSI256Color(value);
         expect(color.value).toBe(value);
-        
+
         // Should always return sequences
         const fgSequence = color.sequence(false);
         const bgSequence = color.sequence(true);
-        
+
         expect(fgSequence).toMatch(/^38;5;-?\d+$/); // Allow negative numbers
         expect(bgSequence).toMatch(/^48;5;-?\d+$/); // Allow negative numbers
       }
@@ -225,33 +232,37 @@ describe('Error Handling and Edge Cases', () => {
     test('converts many colors without memory leaks', () => {
       // Test converting many colors to ensure no memory issues
       const colors: any[] = [];
-      
+
       // Create many different colors
       for (let i = 0; i < 1000; i++) {
         const r = Math.floor(Math.random() * 256);
-        const g = Math.floor(Math.random() * 256);  
+        const g = Math.floor(Math.random() * 256);
         const b = Math.floor(Math.random() * 256);
-        colors.push(new RGBColor(`#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`));
+        colors.push(
+          new RGBColor(
+            `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`
+          )
+        );
       }
-      
+
       // Convert all colors through different profiles
       for (const color of colors) {
         const ansi256 = ProfileUtils.convert(Profile.ANSI256, color);
         const ansi = ProfileUtils.convert(Profile.ANSI, ansi256);
         const ascii = ProfileUtils.convert(Profile.Ascii, color);
-        
+
         expect(ansi256).toBeTruthy();
         expect(ansi).toBeTruthy();
         expect(ascii).toBeTruthy();
       }
-      
+
       // If we get here without crashing, memory handling is OK
       expect(colors.length).toBe(1000);
     });
 
     test('handles rapid profile switching', () => {
       const testColor = new RGBColor('#FF8040');
-      
+
       // Rapidly switch between profiles
       for (let i = 0; i < 100; i++) {
         const profile = [Profile.TrueColor, Profile.ANSI256, Profile.ANSI, Profile.Ascii][i % 4];
@@ -284,10 +295,10 @@ describe('Error Handling and Edge Cases', () => {
     test('ProfileUtils.string handles unicode correctly', () => {
       const unicodeText = '🌈 Hello 世界 🎨 Café ñ';
       const style = ProfileUtils.string(Profile.TrueColor, unicodeText);
-      
+
       const result = style.toString();
       expect(result).toContain(unicodeText);
-      
+
       // Width calculation should handle unicode
       const width = style.width();
       expect(typeof width).toBe('number');
@@ -298,7 +309,7 @@ describe('Error Handling and Edge Cases', () => {
   describe('concurrent access and thread safety', () => {
     test('multiple simultaneous color conversions', async () => {
       const promises: Promise<any>[] = [];
-      
+
       // Start many color conversions simultaneously
       for (let i = 0; i < 50; i++) {
         const promise = Promise.resolve().then(() => {
@@ -307,9 +318,9 @@ describe('Error Handling and Edge Cases', () => {
         });
         promises.push(promise);
       }
-      
+
       const results = await Promise.all(promises);
-      
+
       // All conversions should succeed
       expect(results).toHaveLength(50);
       for (const result of results) {

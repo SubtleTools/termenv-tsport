@@ -3,6 +3,9 @@
  * Port of github.com/muesli/termenv Output struct to TypeScript.
  */
 
+import { HyperlinkControl } from './hyperlink.js';
+import { NotificationControl } from './notification.js';
+import { ScreenControl } from './screen.js';
 import { Style } from './style.js';
 import {
   ANSI256Color,
@@ -20,9 +23,6 @@ import {
   RGBColor,
   ST,
 } from './types.js';
-import { ScreenControl } from './screen.js';
-import { HyperlinkControl } from './hyperlink.js';
-import { NotificationControl } from './notification.js';
 
 // Default global output instance
 let defaultOutput: OutputImpl;

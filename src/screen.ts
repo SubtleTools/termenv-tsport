@@ -11,33 +11,33 @@ import type { Color, Output } from './types.js';
 export const SEQUENCES = {
   // Cursor movement
   CursorUp: '\x1b[%dA',
-  CursorDown: '\x1b[%dB', 
+  CursorDown: '\x1b[%dB',
   CursorForward: '\x1b[%dC',
   CursorBack: '\x1b[%dD',
   CursorNextLine: '\x1b[%dE',
   CursorPreviousLine: '\x1b[%dF',
   CursorHorizontalAbsolute: '\x1b[%dG',
   CursorPosition: '\x1b[%d;%dH',
-  
+
   // Cursor visibility
   SaveCursorPosition: '\x1b7',
   RestoreCursorPosition: '\x1b8',
   HideCursor: '\x1b[?25l',
   ShowCursor: '\x1b[?25h',
-  
+
   // Screen clearing
   EraseDisplay: '\x1b[%dJ',
   EraseLine: '\x1b[%dK',
-  
+
   // Screen modes
   AltScreen: '\x1b[?1049h',
   ExitAltScreen: '\x1b[?1049l',
   SaveScreen: '\x1b[?47h',
   RestoreScreen: '\x1b[?47l',
-  
+
   // Reset
   Reset: '\x1bc',
-  
+
   // Mouse support
   EnableMouse: '\x1b[?1000h',
   DisableMouse: '\x1b[?1000l',
@@ -53,11 +53,11 @@ export const SEQUENCES = {
   DisableMouseExtendedMode: '\x1b[?1006l',
   EnableMousePixelsMode: '\x1b[?1016h',
   DisableMousePixelsMode: '\x1b[?1016l',
-  
+
   // Bracketed paste
   EnableBracketedPaste: '\x1b[?2004h',
   DisableBracketedPaste: '\x1b[?2004l',
-  
+
   // Scrolling
   ChangeScrollingRegion: '\x1b[%d;%dr',
   InsertLines: '\x1b[%dL',
@@ -91,7 +91,9 @@ export class ScreenControl {
 
   // Cursor positioning
   moveCursor(row: number, column: number): this {
-    this.output.writeString(SEQUENCES.CursorPosition.replace('%d', row.toString()).replace('%d', column.toString()));
+    this.output.writeString(
+      SEQUENCES.CursorPosition.replace('%d', row.toString()).replace('%d', column.toString())
+    );
     return this;
   }
 
@@ -148,12 +150,16 @@ export class ScreenControl {
 
   // Screen clearing
   clearScreen(): this {
-    this.output.writeString(SEQUENCES.EraseDisplay.replace('%d', EraseMode.EraseEntireDisplay.toString()));
+    this.output.writeString(
+      SEQUENCES.EraseDisplay.replace('%d', EraseMode.EraseEntireDisplay.toString())
+    );
     return this;
   }
 
   clearLine(): this {
-    this.output.writeString(SEQUENCES.EraseLine.replace('%d', EraseLineMode.EraseEntireLine.toString()));
+    this.output.writeString(
+      SEQUENCES.EraseLine.replace('%d', EraseLineMode.EraseEntireLine.toString())
+    );
     return this;
   }
 
@@ -302,7 +308,9 @@ export class ScreenControl {
 
   // Scrolling
   changeScrollingRegion(top: number, bottom: number): this {
-    this.output.writeString(SEQUENCES.ChangeScrollingRegion.replace('%d', top.toString()).replace('%d', bottom.toString()));
+    this.output.writeString(
+      SEQUENCES.ChangeScrollingRegion.replace('%d', top.toString()).replace('%d', bottom.toString())
+    );
     return this;
   }
 

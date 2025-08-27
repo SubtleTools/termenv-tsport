@@ -1,6 +1,6 @@
-import { describe, expect, test, beforeEach } from 'bun:test';
+import { beforeEach, describe, expect, test } from 'bun:test';
 import { newOutput } from '#src/output.js';
-import { RGBColor, ANSIColor } from '#src/types.js';
+import { ANSIColor, RGBColor } from '#src/types.js';
 
 // Mock writer for capturing terminal sequences
 class MockWriter {
@@ -10,11 +10,11 @@ class MockWriter {
   write(data: Uint8Array | string, callback?: (err?: Error) => void): boolean {
     const text = typeof data === 'string' ? data : new TextDecoder().decode(data);
     this.output.push(text);
-    
+
     if (callback) {
       process.nextTick(() => callback());
     }
-    
+
     return true;
   }
 
@@ -95,7 +95,7 @@ describe('Terminal Control Features', () => {
       await output.saveCursorPosition();
       await output.cursorForward(10);
       await output.restoreCursorPosition();
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('\x1b7'); // Save
       expect(result).toContain('\x1b[10C'); // Move
@@ -137,7 +137,7 @@ describe('Terminal Control Features', () => {
       const styled = output.string('test').foreground(new RGBColor('#FF0000')).bold();
       await output.writeString(styled.toString());
       await output.reset();
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('\x1b['); // Has ANSI sequences
       expect(result).toContain('c'); // Has reset
@@ -150,7 +150,7 @@ describe('Terminal Control Features', () => {
       // Let's test through the screen control directly
       await output.cursorDown(1);
       await output.moveCursor(1, 1); // Move to start of line
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('\x1b[1B'); // Down
       expect(result).toContain('\x1b[1;1H'); // Position
@@ -159,7 +159,7 @@ describe('Terminal Control Features', () => {
     test('cursorPreviousLine moves to previous line start', async () => {
       await output.cursorUp(1);
       await output.moveCursor(1, 1);
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('\x1b[1A'); // Up
       expect(result).toContain('\x1b[1;1H'); // Position
@@ -171,7 +171,7 @@ describe('Terminal Control Features', () => {
       await output.saveScreen();
       await output.writeString('test content');
       await output.restoreScreen();
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('\x1b[?47h'); // Save screen
       expect(result).toContain('test content');
@@ -182,7 +182,7 @@ describe('Terminal Control Features', () => {
       await output.altScreen();
       await output.writeString('alt screen content');
       await output.exitAltScreen();
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('\x1b[?1049h'); // Alt screen
       expect(result).toContain('alt screen content');
@@ -197,7 +197,7 @@ describe('Terminal Control Features', () => {
       // Since it's a screen control method, test through styling
       const styled = output.string('test').foreground(color);
       await output.writeString(styled.toString());
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('\x1b[38;2;255;0;0m'); // RGB foreground
     });
@@ -206,7 +206,7 @@ describe('Terminal Control Features', () => {
       const color = new ANSIColor(4); // Blue
       const styled = output.string('test').background(color);
       await output.writeString(styled.toString());
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('\x1b[44m'); // ANSI blue background
     });
@@ -218,14 +218,14 @@ describe('Terminal Control Features', () => {
       await output.saveCursorPosition();
       await output.cursorForward(10);
       await output.cursorDown(2);
-      
+
       const styled = output.string('Hello World').foreground(new RGBColor('#00FF00')).bold();
       await output.writeString(styled.toString());
-      
+
       await output.restoreCursorPosition();
-      
+
       const result = mockWriter.getAllOutput();
-      
+
       // Verify all sequences are present
       expect(result).toContain('\x1b7'); // Save cursor
       expect(result).toContain('\x1b[10C'); // Move right
@@ -238,12 +238,12 @@ describe('Terminal Control Features', () => {
     test('screen switching with content', async () => {
       await output.altScreen();
       await output.clearScreen();
-      
+
       const styled = output.string('Alt Screen Content').foreground(new RGBColor('#FF00FF'));
       await output.writeString(styled.toString());
-      
+
       await output.exitAltScreen();
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('\x1b[?1049h'); // Enter alt screen
       expect(result).toContain('\x1b[2J'); // Clear screen
@@ -256,7 +256,7 @@ describe('Terminal Control Features', () => {
     test('handles negative cursor movements gracefully', async () => {
       await output.cursorForward(-1);
       await output.cursorBack(-1);
-      
+
       const result = mockWriter.getAllOutput();
       // Should still generate sequences (implementation dependent)
       expect(result).toContain('\x1b['); // Has ANSI sequences
@@ -265,7 +265,7 @@ describe('Terminal Control Features', () => {
     test('handles very large numbers', async () => {
       await output.cursorForward(999999);
       await output.clearLines(1000);
-      
+
       const result = mockWriter.getAllOutput();
       expect(result).toContain('999999'); // Large number in sequence
       // clearLines(1000) repeats sequences, doesn't contain '1000' literally
@@ -278,12 +278,12 @@ describe('Terminal Control Features', () => {
         await output.cursorForward(1);
         await output.cursorBack(1);
       }
-      
+
       const result = mockWriter.getAllOutput();
       // Should have 20 sequences (10 forward, 10 back)
       const forwardCount = (result.match(/\x1b\[1C/g) || []).length;
       const backCount = (result.match(/\x1b\[1D/g) || []).length;
-      
+
       expect(forwardCount).toBe(10);
       expect(backCount).toBe(10);
     });

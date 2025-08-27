@@ -10,7 +10,7 @@ A comprehensive TypeScript port of the Go [termenv](https://github.com/muesli/te
 
 - **🎨 Full Color Support**: TrueColor (24-bit), ANSI 256-color, and standard ANSI colors
 - **🖥️ Terminal Control**: Cursor positioning, screen clearing, alternate screen buffer
-- **🖱️ Mouse Support**: Enable/disable mouse tracking modes  
+- **🖱️ Mouse Support**: Enable/disable mouse tracking modes
 - **🔗 Hyperlinks**: OSC 8 clickable hyperlinks in supported terminals
 - **🔔 Notifications**: OSC 777 terminal notifications
 - **📱 Cross-Platform**: Works on Windows, macOS, Linux, and CI environments

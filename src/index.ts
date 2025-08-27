@@ -21,6 +21,10 @@
  * ```
  */
 
+// Export hyperlink functionality
+export { HyperlinkControl, hyperlink } from './hyperlink.js';
+// Export notification functionality
+export { NotificationControl, notify } from './notification.js';
 // Export output implementation and factory functions
 export {
   defaultOutputInstance,
@@ -35,14 +39,10 @@ export {
 } from './output.js';
 // Export profile utilities
 export { ProfileUtils } from './profile.js';
+// Export screen control functionality
+export { EraseLineMode, EraseMode, ScreenControl, SEQUENCES } from './screen.js';
 // Export style implementation
 export { Style } from './style.js';
-// Export screen control functionality
-export { ScreenControl, SEQUENCES, EraseMode, EraseLineMode } from './screen.js';
-// Export hyperlink functionality
-export { HyperlinkControl, hyperlink } from './hyperlink.js';
-// Export notification functionality  
-export { NotificationControl, notify } from './notification.js';
 // Export all core types and interfaces
 export type {
   Color,
@@ -84,12 +84,12 @@ export {
   TermEnvError,
 } from './types.js';
 
+import { hyperlink } from './hyperlink.js';
+import { notify } from './notification.js';
 // Global convenience functions - matches Go termenv package API
 import { defaultOutputInstance } from './output.js';
 import { ProfileUtils } from './profile.js';
 import { ANSI256Color, ANSIColor, type Color, NoColor, type Profile, RGBColor } from './types.js';
-import { hyperlink } from './hyperlink.js';
-import { notify } from './notification.js';
 
 /**
  * String returns a new styled string for the default output
@@ -283,7 +283,7 @@ export function writeHyperlink(link: string, name: string): void {
   defaultOutputInstance().hyperlink(link, name);
 }
 
-// Notification global functions  
+// Notification global functions
 /**
  * CreateNotification creates a notification string (convenience function, doesn't write to output)
  */

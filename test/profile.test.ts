@@ -1,6 +1,6 @@
-import { describe, expect, test, beforeEach, afterEach } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import { ProfileUtils } from '#src/profile.js';
-import { Profile, ANSIColor, ANSI256Color, RGBColor, NoColor } from '#src/types.js';
+import { ANSI256Color, ANSIColor, NoColor, Profile, RGBColor } from '#src/types.js';
 
 describe('ProfileUtils', () => {
   let originalEnv: Record<string, string | undefined>;
@@ -203,7 +203,7 @@ describe('ProfileUtils', () => {
     test('handles invalid hex values through color creation', () => {
       // Invalid hex should be caught and handled - actual behavior may vary
       expect(() => ProfileUtils.color(Profile.ANSI256, '#GGGGGG')).toThrow();
-      
+
       const result2 = ProfileUtils.color(Profile.ANSI256, '');
       expect(result2).toBeNull();
     });
@@ -229,11 +229,11 @@ describe('ProfileUtils edge cases and error handling', () => {
     // Note: current implementation allows any valid number for ANSI256Color
     const color256 = ProfileUtils.color(Profile.TrueColor, '256');
     expect(color256).toBeInstanceOf(ANSI256Color); // Implementation creates ANSI256Color even for values > 255
-    
+
     // Implementation also accepts negative values
     const negativeColor = ProfileUtils.color(Profile.TrueColor, '-1');
     expect(negativeColor).toBeInstanceOf(ANSIColor); // Becomes ANSIColor with negative value
-    
+
     expect(ProfileUtils.color(Profile.TrueColor, 'NaN')).toBeNull(); // Not a number
     expect(ProfileUtils.color(Profile.TrueColor, 'Infinity')).toBeNull();
   });
@@ -241,11 +241,11 @@ describe('ProfileUtils edge cases and error handling', () => {
   test('color conversion maintains color information', () => {
     const originalHex = '#FF6B35';
     const rgbColor = new RGBColor(originalHex);
-    
+
     // Convert through different profiles
     const ansi256 = ProfileUtils.convert(Profile.ANSI256, rgbColor) as ANSI256Color;
     const ansi = ProfileUtils.convert(Profile.ANSI, ansi256) as ANSIColor;
-    
+
     // Colors should be valid even after conversion
     expect(ansi256).toBeInstanceOf(ANSI256Color);
     expect(ansi256.value).toBeGreaterThanOrEqual(0);

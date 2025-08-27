@@ -1,15 +1,14 @@
-import { describe, expect, test, beforeEach, afterEach } from 'bun:test';
-import { 
-  OutputImpl, 
-  newOutput, 
-  withProfile, 
-  withColorCache, 
-  withTTY, 
-  withUnsafe, 
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
+import {
+  newOutput,
+  parseXTermColor,
+  withColorCache,
   withEnvironment,
-  parseXTermColor
+  withProfile,
+  withTTY,
+  withUnsafe,
 } from '#src/output.js';
-import { Profile, ProcessEnviron, ANSIColor, ANSI256Color, RGBColor, NoColor } from '#src/types.js';
+import { ANSI256Color, ANSIColor, NoColor, Profile, RGBColor } from '#src/types.js';
 
 // Mock writer for capturing output - matches Node.js WriteStream interface
 class MockWriter {
@@ -19,12 +18,12 @@ class MockWriter {
   write(data: Uint8Array | string, callback?: (err?: Error) => void): boolean {
     const text = typeof data === 'string' ? data : new TextDecoder().decode(data);
     this.output.push(text);
-    
+
     // Call callback asynchronously to simulate real Node.js behavior
     if (callback) {
       process.nextTick(() => callback());
     }
-    
+
     return true; // Indicates write was successful
   }
 
@@ -110,7 +109,7 @@ describe('OutputImpl', () => {
         withUnsafe(),
         withColorCache(true)
       );
-      
+
       expect(output.profile).toBe(Profile.TrueColor);
       expect(output.assumeTTY).toBe(true);
       expect(output.unsafe).toBe(true);
@@ -127,20 +126,20 @@ describe('OutputImpl', () => {
     test('write() writes data', async () => {
       const output = newOutput(mockWriter as any);
       const data = new TextEncoder().encode('test');
-      
+
       // Since mockWriter.write returns a Promise, await it directly
       const result = await output.write(data);
-      
+
       expect(result).toBe(4);
       expect(mockWriter.output[0]).toBe('test');
     });
 
     test('writeString() writes string', async () => {
       const output = newOutput(mockWriter as any);
-      
+
       // Since mockWriter.write returns a Promise, await it directly
       const result = await output.writeString('hello');
-      
+
       expect(result).toBe(5);
       expect(mockWriter.output[0]).toBe('hello');
     });
@@ -212,8 +211,15 @@ describe('OutputImpl', () => {
     });
 
     test('detects TrueColor terminals', () => {
-      const trueColorTerms = ['alacritty', 'contour', 'rio', 'wezterm', 'xterm-ghostty', 'xterm-kitty'];
-      
+      const trueColorTerms = [
+        'alacritty',
+        'contour',
+        'rio',
+        'wezterm',
+        'xterm-ghostty',
+        'xterm-kitty',
+      ];
+
       for (const term of trueColorTerms) {
         mockEnv.clearEnv();
         mockEnv.setEnv('TERM', term);
@@ -224,7 +230,7 @@ describe('OutputImpl', () => {
 
     test('detects ANSI from specific terminals', () => {
       const ansiTerms = ['linux', 'xterm'];
-      
+
       for (const term of ansiTerms) {
         mockEnv.clearEnv();
         mockEnv.setEnv('TERM', term);
@@ -260,11 +266,11 @@ describe('OutputImpl', () => {
     test('profile detection considers TTY status', () => {
       mockEnv.setEnv('TERM', 'xterm-256color');
       const output = newOutput(mockWriter as any, withEnvironment(mockEnv), withTTY(false));
-      
+
       // Without TTY, profile detection may return different values
       const profile = output.colorProfile();
       expect(typeof profile).toBe('number');
-      // Profile enum: TrueColor=0, ANSI256=1, ANSI=2, Ascii=3  
+      // Profile enum: TrueColor=0, ANSI256=1, ANSI=2, Ascii=3
       // Lower numbers mean higher capabilities
       expect(profile).toBeGreaterThanOrEqual(Profile.TrueColor);
       expect(profile).toBeLessThanOrEqual(Profile.Ascii);
@@ -373,10 +379,10 @@ describe('OutputImpl', () => {
     test('parses COLORFGBG environment variable', () => {
       mockEnv.setEnv('COLORFGBG', '15;0');
       const output = newOutput(mockWriter as any, withEnvironment(mockEnv), withTTY(true));
-      
+
       const fg = output.foregroundColor();
       const bg = output.backgroundColor();
-      
+
       expect(fg).toBeInstanceOf(ANSIColor);
       expect(bg).toBeInstanceOf(ANSIColor);
       expect((fg as ANSIColor).value).toBe(15);
@@ -386,7 +392,7 @@ describe('OutputImpl', () => {
     test('handles malformed COLORFGBG', () => {
       mockEnv.setEnv('COLORFGBG', 'invalid');
       const output = newOutput(mockWriter as any, withEnvironment(mockEnv), withTTY(true));
-      
+
       expect(output.foregroundColor()).toBeInstanceOf(NoColor);
       expect(output.backgroundColor()).toBeInstanceOf(NoColor);
     });
@@ -394,17 +400,17 @@ describe('OutputImpl', () => {
     test('caches colors when enabled', () => {
       mockEnv.setEnv('COLORFGBG', '15;0');
       const output = newOutput(
-        mockWriter as any, 
-        withEnvironment(mockEnv), 
-        withTTY(true), 
+        mockWriter as any,
+        withEnvironment(mockEnv),
+        withTTY(true),
         withColorCache(true)
       );
-      
+
       const fg1 = output.foregroundColor();
       const fg2 = output.foregroundColor();
       const bg1 = output.backgroundColor();
       const bg2 = output.backgroundColor();
-      
+
       // Should return same instances when cached
       expect(fg1).toBe(fg2);
       expect(bg1).toBe(bg2);
@@ -440,7 +446,7 @@ describe('OutputImpl', () => {
     test('creates colors from hex strings', () => {
       const output = newOutput(mockWriter as any, withProfile(Profile.TrueColor));
       const color = output.color('#FF0000');
-      
+
       expect(color).toBeInstanceOf(RGBColor);
       expect(color?.toString()).toBe('#FF0000');
     });
@@ -448,7 +454,7 @@ describe('OutputImpl', () => {
     test('creates colors from ANSI numbers', () => {
       const output = newOutput(mockWriter as any, withProfile(Profile.ANSI));
       const color = output.color('9');
-      
+
       expect(color).toBeInstanceOf(ANSIColor);
       expect((color as ANSIColor).value).toBe(9);
     });
@@ -456,7 +462,7 @@ describe('OutputImpl', () => {
     test('creates colors from ANSI256 numbers', () => {
       const output = newOutput(mockWriter as any, withProfile(Profile.ANSI256));
       const color = output.color('128');
-      
+
       expect(color).toBeInstanceOf(ANSI256Color);
       expect((color as ANSI256Color).value).toBe(128);
     });
@@ -485,14 +491,14 @@ describe('OutputImpl', () => {
     test('creates styled strings', () => {
       const output = newOutput(mockWriter as any);
       const styled = output.string('test');
-      
+
       expect(styled.toString()).toContain('test');
     });
 
     test('joins multiple strings', () => {
       const output = newOutput(mockWriter as any);
       const styled = output.string('hello', 'world');
-      
+
       expect(styled.toString()).toContain('hello world');
     });
   });
@@ -500,7 +506,7 @@ describe('OutputImpl', () => {
   describe('Go-compatible API', () => {
     test('provides PascalCase methods', () => {
       const output = newOutput(mockWriter as any);
-      
+
       expect(typeof output.String).toBe('function');
       expect(typeof output.Color).toBe('function');
       expect(typeof output.ColorProfile).toBe('function');
@@ -513,11 +519,11 @@ describe('OutputImpl', () => {
 
     test('Go-compatible methods work identically', () => {
       const output = newOutput(mockWriter as any);
-      
+
       const camelCase = output.colorProfile();
       const PascalCase = output.ColorProfile();
       expect(camelCase).toBe(PascalCase);
-      
+
       const camelString = output.string('test').toString();
       const PascalString = output.String('test').toString();
       expect(camelString).toBe(PascalString);
@@ -530,7 +536,7 @@ describe('parseXTermColor', () => {
     // Valid OSC 10/11 response format
     const validResponse = '\x1b]10;rgb:ffff/0000/0000\x07';
     const color = parseXTermColor(validResponse);
-    
+
     expect(color).toBeInstanceOf(RGBColor);
     expect(color?.toString()).toBe('#ff0000'); // hex colors return lowercase
   });
@@ -539,11 +545,11 @@ describe('parseXTermColor', () => {
     const belTerminated = '\x1b]10;rgb:0000/ffff/0000\x07';
     const stTerminated = '\x1b]10;rgb:0000/ffff/0000\x1b\\';
     const escTerminated = '\x1b]10;rgb:0000/ffff/0000\x1b';
-    
+
     const color1 = parseXTermColor(belTerminated);
     const color2 = parseXTermColor(stTerminated);
     const color3 = parseXTermColor(escTerminated);
-    
+
     expect(color1?.toString()).toBe('#00ff00'); // hex colors return lowercase
     expect(color2?.toString()).toBe('#00ff00');
     expect(color3?.toString()).toBe('#00ff00');
@@ -552,7 +558,7 @@ describe('parseXTermColor', () => {
   test('handles different RGB formats', () => {
     const fullFormat = '\x1b]10;rgb:ffff/8080/4040\x07';
     const color = parseXTermColor(fullFormat);
-    
+
     expect(color).toBeInstanceOf(RGBColor);
     // Should truncate to 8-bit values
     expect(color?.toString()).toBe('#ff8040'); // hex colors return lowercase
@@ -568,9 +574,9 @@ describe('parseXTermColor', () => {
 
   test('handles malformed responses gracefully', () => {
     const tooShort = '\x1b]10;\x07';
-    const tooLong = '\x1b]10;' + 'x'.repeat(100) + '\x07';
+    const tooLong = `\x1b]10;${'x'.repeat(100)}\x07`;
     const noTerminator = '\x1b]10;rgb:ffff/0000/0000';
-    
+
     expect(parseXTermColor(tooShort)).toBeNull();
     expect(parseXTermColor(tooLong)).toBeNull();
     expect(parseXTermColor(noTerminator)).toBeNull();

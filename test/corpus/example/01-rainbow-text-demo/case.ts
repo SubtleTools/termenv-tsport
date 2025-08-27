@@ -59,7 +59,7 @@ for (let i = 0; i < text.length; i++) {
   const char = text[i]!;
   const color = rgbColor(colors[i % colors.length]!);
   let styled = out.string(char).foreground(color);
-  styled = styles[i % styles.length]!(styled);
+  styled = styles[i % styles.length]?.(styled);
   variedStyles += styled.toString();
 }
 

@@ -9,6 +9,7 @@ The `replace-workspace-deps` scripts help convert workspace dependencies to thei
 ### Overview
 
 When developing in a monorepo with workspace dependencies like:
+
 ```json
 {
   "dependencies": {
@@ -19,6 +20,7 @@ When developing in a monorepo with workspace dependencies like:
 ```
 
 These need to be replaced with actual published versions before publishing:
+
 ```json
 {
   "dependencies": {
@@ -33,7 +35,7 @@ These need to be replaced with actual published versions before publishing:
 There are multiple scripts provided:
 
 1. **TypeScript version** (`replace-workspace-deps.ts`) - Main implementation using modern APIs
-2. **Node.js version** (`replace-workspace-deps.js`) - Fallback using only Node.js built-ins  
+2. **Node.js version** (`replace-workspace-deps.js`) - Fallback using only Node.js built-ins
 3. **Comprehensive script** (`prepare-for-publish.sh`) - Complete workflow including tests and build
 
 ### Usage
@@ -41,6 +43,7 @@ There are multiple scripts provided:
 #### NPM Scripts (Recommended)
 
 **Individual Replacement Scripts:**
+
 ```bash
 # Dry run - see what would change without making changes
 npm run replace-workspace-deps:dry-run
@@ -56,6 +59,7 @@ npm run replace-workspace-deps
 ```
 
 **Comprehensive Preparation Scripts:**
+
 ```bash
 # Complete dry run (shows all steps without changes)
 npm run prepare-for-publish:dry-run
@@ -178,13 +182,14 @@ If you prefer manual control, when preparing to publish the package:
 The scripts handle common issues gracefully:
 
 - **Package not found in registry**: Warns and skips the package
-- **Network errors**: Shows error message and continues with other packages  
+- **Network errors**: Shows error message and continues with other packages
 - **Permission errors**: Shows clear error message and exits
 - **Invalid JSON**: Shows parsing error and exits
 
 ### Examples
 
 #### Basic Usage
+
 ```bash
 # See what would change
 $ npm run replace-workspace-deps:dry-run
@@ -208,7 +213,8 @@ $ npm run replace-workspace-deps:dry-run
 ```
 
 #### With Backup
-```bash  
+
+```bash
 $ npm run replace-workspace-deps:backup
 
 🔄 Replace Workspace Dependencies
@@ -247,20 +253,27 @@ $ npm run replace-workspace-deps:backup
 ### Troubleshooting
 
 #### Package Not Found
+
 If a workspace dependency hasn't been published yet:
+
 ```
 ⚠️  Package not found in registry: @tsports/my-package
 ```
+
 You need to publish that package first, or temporarily remove it from dependencies.
 
 #### Network Issues
+
 ```
 ❌ Failed to fetch version for @tsports/go-colorful: Network error
 ```
+
 Check your internet connection and npm registry accessibility.
 
 #### Permission Errors
+
 ```
 ❌ Failed to write package.json: EACCES permission denied
 ```
+
 Ensure you have write permissions to the package.json file.

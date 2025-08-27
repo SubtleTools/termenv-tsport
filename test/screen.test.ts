@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'bun:test';
-import { ScreenControl, SEQUENCES, EraseMode, EraseLineMode } from '#src/screen.js';
 import { newOutput } from '#src/output.js';
-import { Profile } from '#src/types.js';
+import { EraseLineMode, EraseMode, ScreenControl, SEQUENCES } from '#src/screen.js';
 
 // Mock writer for capturing output
 class MockWriter {
@@ -122,8 +121,8 @@ describe('ScreenControl', () => {
     const writer = new MockWriter();
     const output = newOutput(writer as any);
     const screen = new ScreenControl(output);
-    
-    const testColor = { sequence: (bg: boolean) => '5;255' };
+
+    const testColor = { sequence: (_bg: boolean) => '5;255' };
 
     screen.setForegroundColor(testColor as any);
     expect(writer.output[0]).toBe('\x1b[38;5;255');
@@ -202,10 +201,7 @@ describe('ScreenControl', () => {
     const output = newOutput(writer as any);
     const screen = new ScreenControl(output);
 
-    const result = screen
-      .clearScreen()
-      .moveCursor(1, 1)
-      .showCursor();
+    const result = screen.clearScreen().moveCursor(1, 1).showCursor();
 
     expect(result).toBe(screen);
     expect(writer.output.length).toBe(3);

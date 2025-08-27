@@ -1,25 +1,52 @@
-import { describe, expect, test, beforeEach, afterEach } from 'bun:test';
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import {
-  // Core functions
-  String, ColorProfile, EnvColorProfile, EnvNoColor,
-  HasDarkBackground, ForegroundColor, BackgroundColor,
-  // Color functions
-  NoColor, ANSIColor, ANSI256Color, RGBColor, Color,
-  // Profile constants
-  TrueColor, ANSI256, ANSI, Ascii,
-  // Screen control functions
-  MoveCursor, CursorUp, CursorDown, ClearScreen, ClearLine,
-  HideCursor, ShowCursor, AltScreen, ExitAltScreen, SetWindowTitle,
-  EnableMouse, DisableMouse,
+  AltScreen,
+  ANSI,
+  ANSI256,
+  ANSI256Color,
+  ANSIColor,
+  Ascii,
+  BackgroundColor,
+  ClearLine,
+  ClearScreen,
+  Color,
+  ColorProfile,
+  Convert,
+  CursorDown,
+  CursorUp,
+  DisableMouse,
+  EnableMouse,
+  EnvColorProfile,
+  EnvNoColor,
+  ExitAltScreen,
+  ForegroundColor,
+  HasDarkBackground,
+  HideCursor,
   // Hyperlink and notification functions
-  Hyperlink, Notify,
+  Hyperlink,
+  // Screen control functions
+  MoveCursor,
   // Output functions
-  NewOutput, WithProfile, WithColorCache, WithTTY, WithUnsafe, WithEnvironment,
+  NewOutput,
+  // Color functions
+  NoColor,
+  Notify,
   // Utility functions
-  ProfileName, Convert
+  ProfileName,
+  RGBColor,
+  SetWindowTitle,
+  ShowCursor,
+  // Core functions
+  String,
+  // Profile constants
+  TrueColor,
+  WithColorCache,
+  WithEnvironment,
+  WithProfile,
+  WithTTY,
+  WithUnsafe,
 } from '#src/go-style.js';
 import { NoColor as NoColorType } from '#src/types.js';
-import { Profile } from '#src/types.js';
 
 // Mock writer for testing
 class MockWriter {
@@ -88,7 +115,7 @@ describe('Go-style API', () => {
 
     test('Style methods use PascalCase', () => {
       const styled = String('Test');
-      
+
       // Test that all PascalCase methods exist
       expect(typeof styled.Foreground).toBe('function');
       expect(typeof styled.Background).toBe('function');
@@ -106,7 +133,7 @@ describe('Go-style API', () => {
     test('Width method returns string width', () => {
       const styled = String('Hi');
       const width = styled.Width();
-      
+
       // Width returns the calculated width, doesn't pad
       expect(width).toBe(2);
     });
@@ -140,7 +167,7 @@ describe('Go-style API', () => {
     test('Color creates color from string', () => {
       const rgbColor = Color('#FF0000');
       expect(rgbColor).not.toBeNull();
-      
+
       // Color function might return NoColor if profile is Ascii
       if (rgbColor instanceof NoColorType) {
         expect(rgbColor.toString()).toBe(''); // NoColor returns empty string
@@ -150,7 +177,7 @@ describe('Go-style API', () => {
 
       const ansiColor = Color('9');
       expect(ansiColor).not.toBeNull();
-      
+
       // ANSI color might also become NoColor in Ascii profile
       if (ansiColor instanceof NoColorType) {
         expect(ansiColor.toString()).toBe('');
@@ -160,7 +187,7 @@ describe('Go-style API', () => {
 
       const ansi256Color = Color('128');
       expect(ansi256Color).not.toBeNull();
-      
+
       // ANSI256 color might also become NoColor in Ascii profile
       if (ansi256Color instanceof NoColorType) {
         expect(ansi256Color.toString()).toBe('');
@@ -365,7 +392,7 @@ describe('Go-style API', () => {
         WithColorCache(true),
         WithEnvironment(mockEnv)
       );
-      
+
       expect(output.profile).toBe(TrueColor);
       expect(output.assumeTTY).toBe(true);
       expect(output.unsafe).toBe(true);
@@ -377,13 +404,13 @@ describe('Go-style API', () => {
   describe('Convert function', () => {
     test('Convert transforms colors based on profile', () => {
       const rgbColor = RGBColor('#FF0000');
-      
+
       // Convert to different profiles
       const trueColorResult = Convert(TrueColor, rgbColor);
       const ansi256Result = Convert(ANSI256, rgbColor);
       const ansiResult = Convert(ANSI, rgbColor);
       const asciiResult = Convert(Ascii, rgbColor);
-      
+
       expect(trueColorResult).toBe(rgbColor); // Should preserve RGB
       expect(ansi256Result).not.toBe(rgbColor); // Should convert
       expect(ansiResult).not.toBe(rgbColor); // Should convert
@@ -392,7 +419,7 @@ describe('Go-style API', () => {
 
     test('Convert handles ANSI colors', () => {
       const ansiColor = ANSIColor(9);
-      
+
       // ANSI colors should be preserved in all profiles except Ascii
       expect(Convert(TrueColor, ansiColor)).toBe(ansiColor);
       expect(Convert(ANSI256, ansiColor)).toBe(ansiColor);
@@ -402,7 +429,7 @@ describe('Go-style API', () => {
 
     test('Convert handles ANSI256 colors', () => {
       const ansi256Color = ANSI256Color(196);
-      
+
       expect(Convert(TrueColor, ansi256Color)).toBe(ansi256Color); // Preserve
       expect(Convert(ANSI256, ansi256Color)).toBe(ansi256Color); // Preserve
       expect(Convert(ANSI, ansi256Color)).not.toBe(ansi256Color); // Convert to ANSI
@@ -414,21 +441,21 @@ describe('Go-style API', () => {
     test('Go-style functions exist and work', () => {
       // Test that the Go-style API provides the same functionality
       // as the camelCase API but with PascalCase names
-      
+
       // String creation
       const goString = String('test');
       const result = goString.Bold().String();
       expect(result).toContain('test');
       // Profile may affect styling output
-      
+
       // Color creation
       const goColor = RGBColor('#FF0000');
       expect(goColor.toString()).toBe('#FF0000');
-      
+
       // Profile functions
       const goProfile = ColorProfile();
       expect(typeof goProfile).toBe('number');
-      
+
       // All functions should exist and be callable
       expect(typeof String).toBe('function');
       expect(typeof ColorProfile).toBe('function');
@@ -443,10 +470,10 @@ describe('Go-style API', () => {
       // Create colors using both APIs and compare
       const goRGB = RGBColor('#FF0000');
       const goANSI = ANSIColor(9);
-      
+
       expect(goRGB.sequence(false)).toBe('38;2;255;0;0'); // Includes foreground prefix
       expect(goANSI.sequence(false)).toBe('91');
-      
+
       // Profile names should match
       expect(ProfileName(TrueColor)).toBe('TrueColor');
       expect(ProfileName(ANSI)).toBe('ANSI');

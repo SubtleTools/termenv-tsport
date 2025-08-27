@@ -1,6 +1,6 @@
-import { describe, expect, test, beforeEach } from 'bun:test';
+import { beforeEach, describe, expect, test } from 'bun:test';
 import { ScreenControl } from '#src/screen.js';
-import { RGBColor, ANSIColor } from '#src/types.js';
+import { ANSIColor, RGBColor } from '#src/types.js';
 
 // Mock output writer
 class MockOutput {
@@ -58,7 +58,7 @@ describe('Complete Screen Control Coverage', () => {
       await screen.cursorNextLine(0);
       await screen.cursorPreviousLine(0);
       await screen.cursorNextLine(999);
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[0E');
       expect(sequences).toContain('\x1b[0F');
@@ -70,7 +70,7 @@ describe('Complete Screen Control Coverage', () => {
     test('saveCursorPosition and restoreCursorPosition', async () => {
       await screen.saveCursorPosition();
       await screen.restoreCursorPosition();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b7'); // Save
       expect(sequences).toContain('\x1b8'); // Restore
@@ -79,7 +79,7 @@ describe('Complete Screen Control Coverage', () => {
     test('cursor visibility control', async () => {
       await screen.hideCursor();
       await screen.showCursor();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[?25l'); // Hide cursor
       expect(sequences).toContain('\x1b[?25h'); // Show cursor
@@ -90,7 +90,7 @@ describe('Complete Screen Control Coverage', () => {
       await screen.cursorForward(5);
       await screen.cursorNextLine(2);
       await screen.restoreCursorPosition();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b7'); // Save
       expect(sequences).toContain('\x1b[5C'); // Forward
@@ -103,7 +103,7 @@ describe('Complete Screen Control Coverage', () => {
     test('altScreen and exitAltScreen', async () => {
       await screen.altScreen();
       await screen.exitAltScreen();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[?1049h'); // Enter alt screen
       expect(sequences).toContain('\x1b[?1049l'); // Exit alt screen
@@ -112,7 +112,7 @@ describe('Complete Screen Control Coverage', () => {
     test('saveScreen and restoreScreen', async () => {
       await screen.saveScreen();
       await screen.restoreScreen();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[?47h'); // Save screen
       expect(sequences).toContain('\x1b[?47l'); // Restore screen
@@ -121,7 +121,7 @@ describe('Complete Screen Control Coverage', () => {
     test('screen clearing methods', async () => {
       await screen.clearScreen();
       await screen.clearLine();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[2J'); // Clear screen
       expect(sequences).toContain('\x1b[2K'); // Clear line
@@ -129,7 +129,7 @@ describe('Complete Screen Control Coverage', () => {
 
     test('clearLines method', async () => {
       await screen.clearLines(5);
-      
+
       const sequences = mockOutput.getAllSequences();
       // clearLines should generate appropriate sequence
       expect(sequences).toContain('\x1b['); // Has ANSI sequence
@@ -140,7 +140,7 @@ describe('Complete Screen Control Coverage', () => {
     test('setForegroundColor with RGB', async () => {
       const color = new RGBColor('#FF0000');
       await screen.setForegroundColor(color);
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[38;38;2;255;0;0');
     });
@@ -148,7 +148,7 @@ describe('Complete Screen Control Coverage', () => {
     test('setForegroundColor with ANSI', async () => {
       const color = new ANSIColor(9);
       await screen.setForegroundColor(color);
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[38;91');
     });
@@ -156,7 +156,7 @@ describe('Complete Screen Control Coverage', () => {
     test('setBackgroundColor with RGB', async () => {
       const color = new RGBColor('#00FF00');
       await screen.setBackgroundColor(color);
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[48;48;2;0;255;0');
     });
@@ -164,7 +164,7 @@ describe('Complete Screen Control Coverage', () => {
     test('setBackgroundColor with ANSI', async () => {
       const color = new ANSIColor(4);
       await screen.setBackgroundColor(color);
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[48;44');
     });
@@ -174,7 +174,7 @@ describe('Complete Screen Control Coverage', () => {
     test('mouse control methods', async () => {
       await screen.enableMouse();
       await screen.disableMouse();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[?1000h'); // Enable mouse
       expect(sequences).toContain('\x1b[?1000l'); // Disable mouse
@@ -183,7 +183,7 @@ describe('Complete Screen Control Coverage', () => {
     test('bracketed paste methods', async () => {
       await screen.enableBracketedPaste();
       await screen.disableBracketedPaste();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[?2004h'); // Enable bracketed paste
       expect(sequences).toContain('\x1b[?2004l'); // Disable bracketed paste
@@ -193,7 +193,7 @@ describe('Complete Screen Control Coverage', () => {
   describe('window and terminal control', () => {
     test('setWindowTitle', async () => {
       await screen.setWindowTitle('Test Window');
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b]2;Test Window\x07'); // Window title sequence
     });
@@ -205,13 +205,13 @@ describe('Complete Screen Control Coverage', () => {
         'Title with "quotes"',
         'Title\nwith\nnewlines',
         'Empty: ',
-        ''
+        '',
       ];
 
       for (const title of titles) {
         mockOutput.clear();
         await screen.setWindowTitle(title);
-        
+
         const sequences = mockOutput.getAllSequences();
         expect(sequences).toContain('\x1b]2;');
         expect(sequences).toContain(title);
@@ -221,7 +221,7 @@ describe('Complete Screen Control Coverage', () => {
 
     test('reset method', async () => {
       await screen.reset();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1bc'); // Terminal reset
     });
@@ -243,7 +243,7 @@ describe('Complete Screen Control Coverage', () => {
       await screen.moveCursor(1, 1);
       await screen.enableMouse();
       await screen.enableBracketedPaste();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[?1049h'); // Alt screen
       expect(sequences).toContain('\x1b[?25l'); // Hide cursor
@@ -260,7 +260,7 @@ describe('Complete Screen Control Coverage', () => {
       await screen.showCursor();
       await screen.reset();
       await screen.exitAltScreen();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b[?2004l'); // Disable bracketed paste
       expect(sequences).toContain('\x1b[?1000l'); // Disable mouse
@@ -280,11 +280,11 @@ describe('Complete Screen Control Coverage', () => {
         await screen.cursorPreviousLine(1);
       }
       await screen.restoreCursorPosition();
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b7'); // Save at start
       expect(sequences).toContain('\x1b8'); // Restore at end
-      
+
       // Should have many cursor movement sequences
       const moveCount = (sequences.match(/\x1b\[\d+;\d+H/g) || []).length;
       expect(moveCount).toBeGreaterThanOrEqual(10);
@@ -296,7 +296,7 @@ describe('Complete Screen Control Coverage', () => {
       // These should not crash
       expect(() => screen.setWindowTitle(null as any)).not.toThrow();
       expect(() => screen.setWindowTitle(undefined as any)).not.toThrow();
-      
+
       expect(() => screen.setForegroundColor(null as any)).toThrow(); // Null color should throw
       expect(() => screen.setBackgroundColor(null as any)).toThrow(); // Null color should throw
     });
@@ -305,7 +305,7 @@ describe('Complete Screen Control Coverage', () => {
       await screen.moveCursor(-1, -1);
       await screen.moveCursor(0, 0);
       await screen.moveCursor(9999, 9999);
-      
+
       const sequences = mockOutput.getAllSequences();
       expect(sequences).toContain('\x1b['); // Should generate sequences
     });
@@ -316,7 +316,7 @@ describe('Complete Screen Control Coverage', () => {
       await screen.moveCursor(5, 5);
       await screen.setForegroundColor(new RGBColor('#FF0000'));
       await screen.restoreCursorPosition();
-      
+
       const allSequences = mockOutput.sequences;
       expect(allSequences[0]).toContain('\x1b7'); // Save first
       expect(allSequences[1]).toContain('\x1b[5;5H'); // Move second

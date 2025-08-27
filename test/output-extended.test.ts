@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
-import { OutputImpl, newOutput } from '#src/output.js';
-import { RGBColor, ANSIColor } from '#src/types.js';
+import { newOutput } from '#src/output.js';
+import { ANSIColor, RGBColor } from '#src/types.js';
 
 // Mock writer for capturing output
 class MockWriter {
@@ -137,13 +137,13 @@ describe('OutputImpl Extended Methods', () => {
 
     expect(writer.output.length).toBe(8);
     expect(writer.output[0]).toBe('\x1b[?1049h'); // Alt screen
-    expect(writer.output[1]).toBe('\x1b[?25l');   // Hide cursor
-    expect(writer.output[2]).toBe('\x1b[2J');     // Clear screen
-    expect(writer.output[3]).toBe('\x1b[1;1H');   // Move cursor
-    expect(writer.output[4]).toBe('\x1b[3;1H');   // Move cursor
+    expect(writer.output[1]).toBe('\x1b[?25l'); // Hide cursor
+    expect(writer.output[2]).toBe('\x1b[2J'); // Clear screen
+    expect(writer.output[3]).toBe('\x1b[1;1H'); // Move cursor
+    expect(writer.output[4]).toBe('\x1b[3;1H'); // Move cursor
     expect(writer.output[5]).toBe('\x1b]8;;https://github.com\x1b\\Visit GitHub\x1b]8;;\x1b\\'); // Hyperlink
-    expect(writer.output[6]).toBe('\x1b[25;1H');  // Move cursor
-    expect(writer.output[7]).toBe('\x1b[?25h');   // Show cursor
+    expect(writer.output[6]).toBe('\x1b[25;1H'); // Move cursor
+    expect(writer.output[7]).toBe('\x1b[?25h'); // Show cursor
   });
 
   test('all extended methods return void as expected', () => {

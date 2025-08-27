@@ -1,27 +1,26 @@
-import { describe, expect, test, beforeEach } from 'bun:test';
+import { beforeEach, describe, expect, test } from 'bun:test';
 import {
-  // Screen control functions
-  moveCursor,
-  cursorUp,
-  cursorDown,
-  clearScreen,
-  clearLine,
-  hideCursor,
-  showCursor,
   altScreen,
-  exitAltScreen,
-  setWindowTitle,
-  enableMouse,
-  disableMouse,
+  clearLine,
+  clearScreen,
   // Hyperlink functions
   createHyperlink,
-  writeHyperlink,
   // Notification functions
   createNotification,
+  cursorDown,
+  cursorUp,
+  disableMouse,
+  enableMouse,
+  exitAltScreen,
+  hideCursor,
+  // Screen control functions
+  moveCursor,
+  newOutput,
   sendNotification,
-  defaultOutputInstance,
   setDefaultOutput,
-  newOutput
+  setWindowTitle,
+  showCursor,
+  writeHyperlink,
 } from '#src/index.js';
 
 // Mock writer for capturing output

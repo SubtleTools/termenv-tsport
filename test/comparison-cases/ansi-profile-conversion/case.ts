@@ -1,26 +1,20 @@
 #!/usr/bin/env bun
-import { 
-  string, rgbColor, ansiColor, ansi256Color, noColor,
-  colorProfile, profileName, clearScreen, moveCursor,
-  createHyperlink, sendNotification, altScreen, exitAltScreen,
-  hideCursor, showCursor, cursorUp, cursorDown, clearLine,
-  enableMouse, disableMouse, setWindowTitle
-} from '../../../../src/index.js';
+import { rgbColor, string } from '../../../../src/index.js';
 
 // Mock process.stdout.write to capture output
 const originalWrite = process.stdout.write;
 let capturedOutput = '';
-(process.stdout.write as any) = function(chunk: any) {
+// biome-ignore lint/suspicious/noExplicitAny: Test utility function requires any for stdout mock
+(process.stdout.write as any) = (chunk: string | Uint8Array) => {
   capturedOutput += chunk.toString();
   return true;
 };
 
 try {
-  
-        // Force ANSI profile and convert RGB color
-        const styled = string('RGB to ANSI').foreground(rgbColor('#FF0000'));
-        process.stdout.write(styled.toString());
-        
+  // Force ANSI profile and convert RGB color
+  const styled = string('RGB to ANSI').foreground(rgbColor('#FF0000'));
+  process.stdout.write(styled.toString());
+
   console.log(capturedOutput);
 } finally {
   process.stdout.write = originalWrite;

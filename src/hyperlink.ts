@@ -15,7 +15,7 @@ export function hyperlink(link: string, name: string): string {
   if (!link) {
     return name;
   }
-  
+
   // OSC 8 format: \e]8;;URL\e\\TEXT\e]8;;\e\\
   return `\x1b]8;;${link}\x1b\\${name}\x1b]8;;\x1b\\`;
 }
@@ -28,7 +28,7 @@ export class HyperlinkControl {
 
   /**
    * Writes a hyperlink to the output
-   * @param link The URL to link to  
+   * @param link The URL to link to
    * @param name The display text for the link
    * @returns This instance for chaining
    */

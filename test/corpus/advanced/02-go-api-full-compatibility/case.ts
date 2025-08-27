@@ -1,3 +1,4 @@
+// biome-ignore lint/suspicious/noShadowRestrictedNames: Go API compatibility requires this name
 import {
   ANSI256,
   ANSI256Color,
