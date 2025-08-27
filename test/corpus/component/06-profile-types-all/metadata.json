@@ -1,0 +1,9 @@
+{
+  "name": "Profile Types All Test",
+  "description": "Tests all profile types (Ascii, ANSI, ANSI256, TrueColor) and color conversion compatibility",
+  "category": "component",
+  "tags": ["profile", "ascii", "ansi", "ansi256", "truecolor", "conversion", "compatibility"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

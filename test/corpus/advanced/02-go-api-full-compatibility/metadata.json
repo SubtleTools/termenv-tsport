@@ -1,0 +1,9 @@
+{
+  "name": "Go API Full Compatibility Test",
+  "description": "Tests full Go API compatibility including PascalCase functions, String() methods, and all configuration options",
+  "category": "advanced",
+  "tags": ["go-api", "compatibility", "pascalcase", "string-method", "configuration", "global-functions"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

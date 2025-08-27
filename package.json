@@ -1,0 +1,103 @@
+{
+  "name": "@tsports/termenv",
+  "version": "1.0.0-tsport",
+  "goSourceVersion": "v1.0.0",
+  "portInfo": {
+    "sourceRepo": "https://github.com/muesli/termenv",
+    "sourceVersion": "v1.0.0",
+    "tsportVersion": 0,
+    "lastUpdated": "2024-08-24T12:00:00Z"
+  },
+  "description": "TypeScript port of termenv with 100% API compatibility",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "module": "./dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "moon run build",
+    "clean": "moon run clean",
+    "dev": "moon run dev",
+    "test": "moon run test",
+    "lint": "moon run lint",
+    "format": "moon run format",
+    "format:check": "dprint check",
+    "docs": "moon run docs",
+    "docs:build": "moon run docs-build",
+    "dev-docs": "moon run dev-docs",
+    "prepack": "moon run prepack",
+    "setup": "moon run setup",
+    "version:bump-go": "moon run version-bump-go",
+    "version:bump-tsport": "moon run version-bump-tsport",
+    "replace-workspace-deps": "bun run scripts/replace-workspace-deps.ts",
+    "replace-workspace-deps:dry-run": "bun run scripts/replace-workspace-deps.ts --dry-run",
+    "replace-workspace-deps:backup": "bun run scripts/replace-workspace-deps.ts --backup",
+    "replace-workspace-deps:exact": "bun run scripts/replace-workspace-deps.ts --strategy exact",
+    "prepare-for-publish": "scripts/prepare-for-publish.sh",
+    "prepare-for-publish:dry-run": "scripts/prepare-for-publish.sh --dry-run",
+    "prepare-for-publish:and-publish": "scripts/prepare-for-publish.sh --publish"
+  },
+  "keywords": [
+    "termenv",
+    "go-port",
+    "typescript"
+  ],
+  "author": {
+    "name": "tsports",
+    "url": "https://github.com/tsports"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TSports/termenv"
+  },
+  "bugs": {
+    "url": "https://github.com/TSports/termenv/issues"
+  },
+  "homepage": "https://github.com/TSports/termenv#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "imports": {
+    "#src/*": "./src/*",
+    "#test/*": "./test/*"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./go-style": {
+      "import": "./dist/go-style.js",
+      "types": "./dist/go-style.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "types": "./dist/types.d.ts"
+    },
+    "./package.json": "./package.json",
+    "./README.md": "./README.md"
+  },
+  "dependencies": {
+    "@tsports/go-colorful": "workspace:*",
+    "@tsports/uniseg": "workspace:*"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.2.2",
+    "@moonrepo/cli": "^1.39.4",
+    "@types/bun": "^1.2.20",
+    "bun-types": "^1.2.20",
+    "dprint": "^0.50.1",
+    "tsconfig-moon": "^1.4.1",
+    "typedoc": "^0.28.10",
+    "typedoc-plugin-markdown": "^4.8.1",
+    "typedoc-vitepress-theme": "^1.1.2",
+    "typescript": "^5.9.2",
+    "vitepress": "^1.6.4"
+  }
+}

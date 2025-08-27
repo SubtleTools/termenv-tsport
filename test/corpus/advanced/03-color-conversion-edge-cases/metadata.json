@@ -1,0 +1,9 @@
+{
+  "name": "Color Conversion Edge Cases Test",
+  "description": "Tests edge cases in color conversion between profiles, including pure colors, close colors, and boundary values",
+  "category": "advanced",
+  "tags": ["color-conversion", "edge-cases", "profile-conversion", "boundary-values", "close-colors"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

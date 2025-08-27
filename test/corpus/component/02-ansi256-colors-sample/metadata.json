@@ -1,0 +1,9 @@
+{
+  "name": "ANSI256 Colors Sample Test",
+  "description": "Tests representative ANSI256 colors (16-255) including color cube and grayscale",
+  "category": "component",
+  "tags": ["color", "ansi256", "foreground", "background", "grayscale", "color-cube"],
+  "environments": ["FORCE_COLOR=2"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

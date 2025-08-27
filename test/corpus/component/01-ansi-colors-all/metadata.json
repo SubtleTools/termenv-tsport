@@ -1,0 +1,9 @@
+{
+  "name": "ANSI Colors All Test",
+  "description": "Tests all 16 ANSI colors (0-15) with foreground and background rendering",
+  "category": "component",
+  "tags": ["color", "ansi", "foreground", "background", "all-colors"],
+  "environments": ["FORCE_COLOR=1"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

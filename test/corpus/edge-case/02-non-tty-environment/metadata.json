@@ -1,0 +1,9 @@
+{
+  "name": "Non-TTY Environment Test",
+  "description": "Tests behavior in non-TTY environments, forced TTY, unsafe mode, and various configuration combinations",
+  "category": "edge-case",
+  "tags": ["edge-case", "non-tty", "forced-tty", "unsafe", "environment", "configuration"],
+  "environments": [],
+  "skipReasons": [],
+  "expectedFailures": []
+}

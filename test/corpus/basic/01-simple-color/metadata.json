@@ -1,0 +1,9 @@
+{
+  "name": "Simple Color Test",
+  "description": "Tests basic RGB color rendering with foreground colors",
+  "category": "basic",
+  "tags": ["color", "foreground", "rgb", "basic"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

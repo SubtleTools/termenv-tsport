@@ -1,0 +1,9 @@
+{
+  "name": "Environment Detection FORCE_COLOR Test",
+  "description": "Tests FORCE_COLOR environment variable detection and its impact on color profile selection",
+  "category": "component",
+  "tags": ["environment", "force-color", "env-detection", "color-profile"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

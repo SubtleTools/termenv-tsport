@@ -1,0 +1,9 @@
+{
+  "name": "Complex Method Chaining Test",
+  "description": "Tests complex method chaining including progressive chaining, all-in-one chaining, and order independence",
+  "category": "advanced",
+  "tags": ["chaining", "progressive", "complex", "order-independence", "multi-style", "colors"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Go API Compatibility Test",
+  "description": "Tests that Go-style API produces identical output to Go implementation",
+  "category": "basic",
+  "tags": ["go-api", "compatibility", "global", "ansi"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

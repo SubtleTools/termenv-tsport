@@ -1,0 +1,9 @@
+{
+  "name": "Rainbow Text Demo",
+  "description": "Demonstrates practical usage with rainbow colors, varied styles, and decorative borders",
+  "category": "example",
+  "tags": ["example", "rainbow", "demo", "practical", "decorative", "border", "gradient"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

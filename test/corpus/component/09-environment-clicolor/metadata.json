@@ -1,0 +1,9 @@
+{
+  "name": "Environment Detection CLICOLOR Test",
+  "description": "Tests CLICOLOR=0 environment variable detection and its impact on color rendering",
+  "category": "component",
+  "tags": ["environment", "clicolor", "env-detection", "color-disable"],
+  "environments": ["CLICOLOR=0"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

@@ -1,0 +1,20 @@
+--- Invalid Colors Edge Case Test ---
+Invalid hex 'invalid': Invalid hex 'invalid'
+Invalid hex '#ZZZZZZ': Invalid hex '#ZZZZZZ'
+Invalid hex '#12345': [38;2;18;52;5mInvalid hex '#12345'[0m
+Invalid hex '#1234567': [38;2;18;52;86mInvalid hex '#1234567'[0m
+Invalid hex '': Invalid hex ''
+Invalid hex ' ': Invalid hex ' '
+Invalid hex '#': Invalid hex '#'
+Invalid ANSI -1: [29mInvalid ANSI -1[0m
+Invalid ANSI 16: [98mInvalid ANSI 16[0m
+Invalid ANSI 256: [338mInvalid ANSI 256[0m
+Invalid ANSI 999: [1081mInvalid ANSI 999[0m
+Invalid ANSI256 -1: [38;5;-1mInvalid ANSI256 -1[0m
+Invalid ANSI256 256: [38;5;256mInvalid ANSI256 256[0m
+Invalid ANSI256 300: [38;5;300mInvalid ANSI256 300[0m
+Invalid ANSI256 999: [38;5;999mInvalid ANSI256 999[0m
+Empty string styled: '[1;38;2;255;0;0m[0m'
+Whitespace styled: '[1;38;2;0;255;0m   [0m'
+NoColor styled: NoColor test
+Chained with invalid: [1;48;5;-5;3mChained with invalid[0m

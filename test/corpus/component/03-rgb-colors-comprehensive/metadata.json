@@ -1,0 +1,9 @@
+{
+  "name": "RGB Colors Comprehensive Test",
+  "description": "Tests RGB colors with hex values including 3-digit hex, 6-digit hex, and background colors",
+  "category": "component",
+  "tags": ["color", "rgb", "hex", "truecolor", "foreground", "background", "3-digit", "6-digit"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

@@ -1,0 +1,13 @@
+# Built files
+dist/**
+**/*.d.ts
+**/*.js
+**/*.cjs
+**/*.mjs
+
+# Node modules
+node_modules/**
+
+# Examples output
+examples/**/*.js
+examples/**/*.d.ts

@@ -1,0 +1,33 @@
+--- Output Methods Comprehensive Test ---
+--- NewOutput Factory Tests ---
+Default profile: 3
+TrueColor profile: 3
+TTY forced profile: 0
+Cache enabled profile: 3
+Unsafe mode profile: 0
+Custom env profile: 3
+Combined options profile: 0
+
+--- Global Functions Tests ---
+ColorProfile(): 3
+EnvColorProfile(): 2
+EnvNoColor(): false
+HasDarkBackground(): true
+ForegroundColor: 
+BackgroundColor: 
+
+--- Output Color Methods Tests ---
+Output ForegroundColor: 
+Output BackgroundColor: 
+Output HasDarkBackground: true
+Output EnvNoColor: false
+Output EnvColorProfile: 2
+Color() red: [91mRed from Color()[0m
+Color() blue: [34mBlue from Color()[0m
+Color() green: [92mGreen from Color()[0m
+
+--- Profile Compatibility Tests ---
+Ascii profile: Ascii Test
+ANSI profile: [38;2;255;102;0mANSI Test[0m
+ANSI256 profile: [38;2;255;102;0mANSI256 Test[0m
+TrueColor profile: [38;2;255;102;0mTrueColor Test[0m

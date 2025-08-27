@@ -1,0 +1,9 @@
+{
+  "name": "Invalid Colors Edge Case Test",
+  "description": "Tests handling of invalid color values, out-of-range colors, empty strings, and error conditions",
+  "category": "edge-case",
+  "tags": ["edge-case", "invalid-colors", "out-of-range", "error-handling", "empty-string", "whitespace"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

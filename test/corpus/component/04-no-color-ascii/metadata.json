@@ -1,0 +1,9 @@
+{
+  "name": "NoColor ASCII Profile Test",
+  "description": "Tests NoColor behavior in ASCII profile where all colors and styles render as plain text",
+  "category": "component",
+  "tags": ["color", "nocolor", "ascii", "plain-text", "profile"],
+  "environments": ["NO_COLOR=1"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Text Styling Test",
+  "description": "Tests basic text styling like bold, italic, underline and combinations",
+  "category": "basic",
+  "tags": ["styling", "bold", "italic", "underline", "basic"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

@@ -1,0 +1,9 @@
+{
+  "name": "All Style Methods Test",
+  "description": "Tests all available style methods: bold, faint, italic, underline, overline, blink, reverse, crossOut",
+  "category": "component",
+  "tags": ["style", "bold", "faint", "italic", "underline", "overline", "blink", "reverse", "crossout", "chaining"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

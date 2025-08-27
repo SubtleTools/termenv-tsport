@@ -1,0 +1,9 @@
+{
+  "name": "Environment Detection NO_COLOR Test",
+  "description": "Tests NO_COLOR environment variable detection and its impact on color rendering",
+  "category": "component",
+  "tags": ["environment", "no-color", "env-detection", "color-disable"],
+  "environments": ["NO_COLOR=1"],
+  "skipReasons": [],
+  "expectedFailures": []
+}

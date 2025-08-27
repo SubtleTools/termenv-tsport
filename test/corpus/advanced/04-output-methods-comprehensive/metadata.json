@@ -1,0 +1,9 @@
+{
+  "name": "Output Methods Comprehensive Test",
+  "description": "Tests all output factory methods, configuration options, global functions, and color detection methods",
+  "category": "advanced",
+  "tags": ["output", "factory", "configuration", "global-functions", "color-detection", "environment", "comprehensive"],
+  "environments": ["FORCE_COLOR=3"],
+  "skipReasons": [],
+  "expectedFailures": []
+}
