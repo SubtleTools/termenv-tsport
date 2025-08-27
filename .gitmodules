@@ -1,3 +1,6 @@
 [submodule "test/reference"]
 	path = test/reference
 	url = https://github.com/rivo/uniseg.git
+[submodule "test/automation/reference"]
+	path = test/automation/reference
+	url = https://github.com/muesli/termenv.git

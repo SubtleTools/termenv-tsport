@@ -1,0 +1,88 @@
+[
+  {
+    "text": "Enumerations",
+    "collapsed": true,
+    "items": [{ "text": "Profile", "link": "/api/enumerations/Profile.md" }]
+  },
+  {
+    "text": "Classes",
+    "collapsed": true,
+    "items": [
+      { "text": "OutputImpl", "link": "/api/classes/OutputImpl.md" },
+      { "text": "Style", "link": "/api/classes/Style.md" },
+      { "text": "TermEnvError", "link": "/api/classes/TermEnvError.md" },
+      { "text": "InvalidColorError", "link": "/api/classes/InvalidColorError.md" },
+      { "text": "StatusReportError", "link": "/api/classes/StatusReportError.md" },
+      { "text": "NoColor", "link": "/api/classes/NoColor.md" },
+      { "text": "ANSIColor", "link": "/api/classes/ANSIColor.md" },
+      { "text": "ANSI256Color", "link": "/api/classes/ANSI256Color.md" },
+      { "text": "RGBColor", "link": "/api/classes/RGBColor.md" }
+    ]
+  },
+  {
+    "text": "Interfaces",
+    "collapsed": true,
+    "items": [
+      { "text": "Color", "link": "/api/interfaces/Color.md" },
+      { "text": "Environ", "link": "/api/interfaces/Environ.md" },
+      { "text": "Output", "link": "/api/interfaces/Output.md" },
+      { "text": "File", "link": "/api/interfaces/File.md" }
+    ]
+  },
+  {
+    "text": "Type Aliases",
+    "collapsed": true,
+    "items": [{ "text": "OutputOption", "link": "/api/type-aliases/OutputOption.md" }]
+  },
+  {
+    "text": "Variables",
+    "collapsed": true,
+    "items": [
+      { "text": "ProfileUtils", "link": "/api/variables/ProfileUtils.md" },
+      { "text": "ANSIBlack", "link": "/api/variables/ANSIBlack.md" },
+      { "text": "ANSIRed", "link": "/api/variables/ANSIRed.md" },
+      { "text": "ANSIGreen", "link": "/api/variables/ANSIGreen.md" },
+      { "text": "ANSIYellow", "link": "/api/variables/ANSIYellow.md" },
+      { "text": "ANSIBlue", "link": "/api/variables/ANSIBlue.md" },
+      { "text": "ANSIMagenta", "link": "/api/variables/ANSIMagenta.md" },
+      { "text": "ANSICyan", "link": "/api/variables/ANSICyan.md" },
+      { "text": "ANSIWhite", "link": "/api/variables/ANSIWhite.md" },
+      { "text": "ANSIBrightBlack", "link": "/api/variables/ANSIBrightBlack.md" },
+      { "text": "ANSIBrightRed", "link": "/api/variables/ANSIBrightRed.md" },
+      { "text": "ANSIBrightGreen", "link": "/api/variables/ANSIBrightGreen.md" },
+      { "text": "ANSIBrightYellow", "link": "/api/variables/ANSIBrightYellow.md" },
+      { "text": "ANSIBrightBlue", "link": "/api/variables/ANSIBrightBlue.md" },
+      { "text": "ANSIBrightMagenta", "link": "/api/variables/ANSIBrightMagenta.md" },
+      { "text": "ANSIBrightCyan", "link": "/api/variables/ANSIBrightCyan.md" },
+      { "text": "ANSIBrightWhite", "link": "/api/variables/ANSIBrightWhite.md" }
+    ]
+  },
+  {
+    "text": "Functions",
+    "collapsed": true,
+    "items": [
+      { "text": "string", "link": "/api/functions/string.md" },
+      { "text": "colorProfile", "link": "/api/functions/colorProfile.md" },
+      { "text": "envColorProfile", "link": "/api/functions/envColorProfile.md" },
+      { "text": "envNoColor", "link": "/api/functions/envNoColor.md" },
+      { "text": "hasDarkBackground", "link": "/api/functions/hasDarkBackground.md" },
+      { "text": "foregroundColor", "link": "/api/functions/foregroundColor.md" },
+      { "text": "backgroundColor", "link": "/api/functions/backgroundColor.md" },
+      { "text": "noColor", "link": "/api/functions/noColor.md" },
+      { "text": "ansiColor", "link": "/api/functions/ansiColor.md" },
+      { "text": "ansi256Color", "link": "/api/functions/ansi256Color.md" },
+      { "text": "rgbColor", "link": "/api/functions/rgbColor.md" },
+      { "text": "color", "link": "/api/functions/color.md" },
+      { "text": "profileName", "link": "/api/functions/profileName.md" },
+      { "text": "newOutput", "link": "/api/functions/newOutput.md" },
+      { "text": "withProfile", "link": "/api/functions/withProfile.md" },
+      { "text": "withColorCache", "link": "/api/functions/withColorCache.md" },
+      { "text": "withEnvironment", "link": "/api/functions/withEnvironment.md" },
+      { "text": "withTTY", "link": "/api/functions/withTTY.md" },
+      { "text": "withUnsafe", "link": "/api/functions/withUnsafe.md" },
+      { "text": "defaultOutputInstance", "link": "/api/functions/defaultOutputInstance.md" },
+      { "text": "setDefaultOutput", "link": "/api/functions/setDefaultOutput.md" },
+      { "text": "convertToRGB", "link": "/api/functions/convertToRGB.md" }
+    ]
+  }
+]

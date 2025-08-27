@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'bun:test';
+import { execSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
@@ -10,7 +11,58 @@ import {
   string,
 } from '#src/index.js';
 import { Profile } from '#src/types.js';
-import { compareOutputs, runTestCase } from '../../uniseg/test/utils/comparison.js';
+import { compareOutputs } from './utils/comparison.js';
+
+// Custom runComparisonTestCase for comparison cases that need Go module access
+function runComparisonTestCase(
+  testPath: string,
+  isGo: boolean,
+  env: Record<string, string> = {}
+): string {
+  const filename = isGo ? 'case.go' : 'case.ts';
+
+  if (isGo) {
+    // Copy the Go file to corpus directory and run it there
+    const corpusPath = join(import.meta.dir, 'corpus');
+    const tempGoFile = join(corpusPath, `temp_${Date.now()}.go`);
+    const goFilePath = join(testPath, filename);
+
+    try {
+      // Copy Go file to corpus directory
+      const goContent = require('node:fs').readFileSync(goFilePath, 'utf8');
+      require('node:fs').writeFileSync(tempGoFile, goContent);
+
+      // Run from corpus directory
+      const result = execSync(`go run ${tempGoFile}`, {
+        cwd: corpusPath,
+        encoding: 'utf8',
+        env: { ...process.env, ...env },
+      }).trim();
+
+      // Clean up temp file
+      require('node:fs').unlinkSync(tempGoFile);
+      return result;
+    } catch (error) {
+      // Clean up temp file on error
+      try {
+        require('node:fs').unlinkSync(tempGoFile);
+      } catch {}
+      throw new Error(`Failed to run Go test case: ${error}`);
+    }
+  } else {
+    // Run TypeScript case normally
+    const command = `bun run ${filename}`;
+    try {
+      return execSync(command, {
+        cwd: testPath,
+        encoding: 'utf8',
+        env: { ...process.env, ...env },
+      }).trim();
+    } catch (error) {
+      throw new Error(`Failed to run TypeScript test case: ${error}`);
+    }
+  }
+}
 
 // Helper to create test cases
 function createTestCase(name: string, tsCode: string, goCode: string) {
@@ -18,6 +70,11 @@ function createTestCase(name: string, tsCode: string, goCode: string) {
 
   try {
     mkdirSync(testDir, { recursive: true });
+
+    // Extract additional imports from tsCode if any
+    const importMatch = tsCode.match(/^\s*import\s+.*?;/gm);
+    const additionalImports = importMatch ? importMatch.join('\n') : '';
+    const codeWithoutImports = tsCode.replace(/^\s*import\s+.*?;\s*/gm, '').trim();
 
     // Write TypeScript test case
     writeFileSync(
@@ -30,20 +87,26 @@ import {
   hideCursor, showCursor, cursorUp, cursorDown, clearLine,
   enableMouse, disableMouse, setWindowTitle
 } from '../../../dist/index.js';
+import { Profile } from '../../../dist/types.js';
+${additionalImports}
 
-// Mock process.stdout.write to capture output
+// Mock process.stdout.write to capture output and force TTY detection
 const originalWrite = process.stdout.write;
+const originalIsTTY = process.stdout.isTTY;
 let capturedOutput = '';
 (process.stdout.write as any) = function(chunk: any) {
   capturedOutput += chunk.toString();
   return true;
 };
+// Force TTY detection for color output
+process.stdout.isTTY = true;
 
 try {
-  ${tsCode}
+  ${codeWithoutImports}
   console.log(capturedOutput);
 } finally {
   process.stdout.write = originalWrite;
+  process.stdout.isTTY = originalIsTTY;
 }
 `
     );
@@ -55,7 +118,6 @@ try {
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/muesli/termenv"
@@ -99,11 +161,11 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, {
+          const tsOutput = runComparisonTestCase(testCase, false, {
             COLORTERM: 'truecolor',
             TERM: 'xterm-256color',
           });
-          const goOutput = runTestCase(testCase, true, {
+          const goOutput = runComparisonTestCase(testCase, true, {
             COLORTERM: 'truecolor',
             TERM: 'xterm-256color',
           });
@@ -136,8 +198,8 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, { TERM: 'xterm-color' });
-          const goOutput = runTestCase(testCase, true, { TERM: 'xterm-color' });
+          const tsOutput = runComparisonTestCase(testCase, false, { TERM: 'xterm-color' });
+          const goOutput = runComparisonTestCase(testCase, true, { TERM: 'xterm-color' });
 
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
@@ -162,8 +224,8 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, { TERM: 'xterm-256color' });
-          const goOutput = runTestCase(testCase, true, { TERM: 'xterm-256color' });
+          const tsOutput = runComparisonTestCase(testCase, false, { TERM: 'xterm-256color' });
+          const goOutput = runComparisonTestCase(testCase, true, { TERM: 'xterm-256color' });
 
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
@@ -190,8 +252,8 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, { TERM: 'xterm-256color' });
-          const goOutput = runTestCase(testCase, true, { TERM: 'xterm-256color' });
+          const tsOutput = runComparisonTestCase(testCase, false, { TERM: 'xterm-256color' });
+          const goOutput = runComparisonTestCase(testCase, true, { TERM: 'xterm-256color' });
 
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
@@ -226,11 +288,11 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, {
+          const tsOutput = runComparisonTestCase(testCase, false, {
             COLORTERM: 'truecolor',
             TERM: 'xterm-256color',
           });
-          const goOutput = runTestCase(testCase, true, {
+          const goOutput = runComparisonTestCase(testCase, true, {
             COLORTERM: 'truecolor',
             TERM: 'xterm-256color',
           });
@@ -261,8 +323,8 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, { TERM: 'linux' }); // Forces ANSI profile
-          const goOutput = runTestCase(testCase, true, { TERM: 'linux' });
+          const tsOutput = runComparisonTestCase(testCase, false, { TERM: 'linux' }); // Forces ANSI profile
+          const goOutput = runComparisonTestCase(testCase, true, { TERM: 'linux' });
 
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
@@ -293,8 +355,8 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, { TERM: 'dumb' }); // Forces ASCII profile
-          const goOutput = runTestCase(testCase, true, { TERM: 'dumb' });
+          const tsOutput = runComparisonTestCase(testCase, false, { TERM: 'dumb' }); // Forces ASCII profile
+          const goOutput = runComparisonTestCase(testCase, true, { TERM: 'dumb' });
 
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
@@ -311,7 +373,7 @@ describe('Go Comparison Tests', () => {
         'go-style-api',
         `
         // Using TypeScript Go-style API
-        import { String, RGBColor } from '../../../../src/go-style.js';
+        import { String, RGBColor } from '#src/go-style.js';
         const styled = String('Go Style API').Foreground(RGBColor('#00FF00')).Bold();
         process.stdout.write(styled.String());
         `,
@@ -323,11 +385,11 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, {
+          const tsOutput = runComparisonTestCase(testCase, false, {
             COLORTERM: 'truecolor',
             TERM: 'xterm-256color',
           });
-          const goOutput = runTestCase(testCase, true, {
+          const goOutput = runComparisonTestCase(testCase, true, {
             COLORTERM: 'truecolor',
             TERM: 'xterm-256color',
           });
@@ -357,8 +419,8 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false);
-          const goOutput = runTestCase(testCase, true);
+          const tsOutput = runComparisonTestCase(testCase, false);
+          const goOutput = runComparisonTestCase(testCase, true);
 
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);
@@ -385,8 +447,14 @@ describe('Go Comparison Tests', () => {
 
       if (testCase) {
         try {
-          const tsOutput = runTestCase(testCase, false, { NO_COLOR: '1', TERM: 'xterm-256color' });
-          const goOutput = runTestCase(testCase, true, { NO_COLOR: '1', TERM: 'xterm-256color' });
+          const tsOutput = runComparisonTestCase(testCase, false, {
+            NO_COLOR: '1',
+            TERM: 'xterm-256color',
+          });
+          const goOutput = runComparisonTestCase(testCase, true, {
+            NO_COLOR: '1',
+            TERM: 'xterm-256color',
+          });
 
           const comparison = compareOutputs(tsOutput, goOutput);
           expect(comparison.match).toBe(true);

@@ -1,10 +1,10 @@
 {
   "name": "@tsports/termenv",
-  "version": "1.0.0-tsport",
+  "version": "0.16.0-tsport",
   "goSourceVersion": "v1.0.0",
   "portInfo": {
     "sourceRepo": "https://github.com/muesli/termenv",
-    "sourceVersion": "v1.0.0",
+    "sourceVersion": "v0.16.0",
     "tsportVersion": 0,
     "lastUpdated": "2024-08-24T12:00:00Z"
   },
@@ -18,23 +18,22 @@
     "clean": "rm -rf dist",
     "dev": "bun tsc --project tsconfig.build.json --watch",
     "test": "bun test",
+    "test:compatibility": "bun test test/automated-cases.test.ts",
+    "test:examples": "bun test test/examples-comparison.test.ts",
+    "test:init-reference": "cd test/automation && git submodule update --init --recursive",
+    "test:update-snapshots": "echo 'Snapshot update script not implemented'",
+    "test:apply-patches": "echo 'Patch application script not implemented'",
     "lint": "biome check src test --no-errors-on-unmatched --write --diagnostic-level=error",
     "format": "biome format --write src test",
     "format:check": "dprint check",
     "docs": "typedoc",
-    "docs:build": "typedoc && vitepress build docs",
-    "dev-docs": "vitepress dev docs",
+    "docs:build": "typedoc",
+    "docs:serve": "echo 'Docs serve script not implemented'",
     "prepack": "bun run build",
-    "setup": "bun install",
-    "version:bump-go": "echo 'Version bumping not implemented'",
-    "version:bump-tsport": "echo 'Version bumping not implemented'",
-    "replace-workspace-deps": "bun run scripts/replace-workspace-deps.ts",
-    "replace-workspace-deps:dry-run": "bun run scripts/replace-workspace-deps.ts --dry-run",
-    "replace-workspace-deps:backup": "bun run scripts/replace-workspace-deps.ts --backup",
-    "replace-workspace-deps:exact": "bun run scripts/replace-workspace-deps.ts --strategy exact",
-    "prepare-for-publish": "scripts/prepare-for-publish.sh",
-    "prepare-for-publish:dry-run": "scripts/prepare-for-publish.sh --dry-run",
-    "prepare-for-publish:and-publish": "scripts/prepare-for-publish.sh --publish"
+    "setup": "bun run scripts/setup-reference.ts https://github.com/muesli/termenv.git",
+    "setup:hooks": "./scripts/setup-hooks.sh",
+    "version:bump-go": "bun run scripts/bump-go-version.ts",
+    "version:bump-tsport": "bun run scripts/bump-tsport-version.ts"
   },
   "keywords": [
     "termenv",
@@ -55,7 +54,7 @@
   },
   "homepage": "https://github.com/SubtleTools/termenv-tsport#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=16.0.0"
   },
   "files": [
     "dist",

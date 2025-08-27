@@ -3,7 +3,7 @@
  * Port of github.com/muesli/termenv style.go to TypeScript.
  */
 
-import { stringWidth } from '../../uniseg/dist/index.js';
+import { stringWidth } from '@tsports/uniseg';
 import { type Color, CSI, Profile } from './types.js';
 
 // Sequence definitions - matches Go constants

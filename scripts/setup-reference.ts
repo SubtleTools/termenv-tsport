@@ -29,7 +29,7 @@ async function main() {
   console.log('✅ Setup completed successfully!');
   console.log('');
   console.log('Next steps:');
-  console.log('1. Analyze the Go codebase in test/reference/');
+  console.log('1. Analyze the Go codebase in test/automation/reference/');
   console.log('2. Implement the TypeScript port in src/');
   console.log('3. Add tests that verify compatibility with Go implementation');
   console.log('4. Run `moon run test` to verify everything works');
@@ -42,20 +42,20 @@ async function cloneGoReference(goRepo: string) {
   console.log('📦 Cloning Go reference implementation...');
   
   try {
-    // Create test directory and clone Go repository as reference
-    await $`mkdir -p test`;
+    // Create test/automation directory and clone Go repository as reference
+    await $`mkdir -p test/automation`;
     
-    if (existsSync('test/reference')) {
+    if (existsSync('test/automation/reference')) {
       console.log('   Reference already exists, updating...');
-      await $`cd test/reference && git pull`;
+      await $`cd test/automation/reference && git pull`;
     } else {
-      await $`cd test && git clone ${goRepo} reference`;
-      console.log('   ✓ Cloned Go reference to test/reference/');
+      await $`cd test/automation && git clone ${goRepo} reference`;
+      console.log('   ✓ Cloned Go reference to test/automation/reference/');
     }
   } catch (error) {
     console.error('   ⚠️  Failed to clone Go reference:', error);
     console.log('   You can manually clone it later with:');
-    console.log(`   git clone ${goRepo} test/reference`);
+    console.log(`   git clone ${goRepo} test/automation/reference`);
   }
 }
 
@@ -93,7 +93,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Go reference (large)
-test/reference/.git/
+test/automation/reference/.git/
 `;
 
   if (!existsSync('.gitignore')) {

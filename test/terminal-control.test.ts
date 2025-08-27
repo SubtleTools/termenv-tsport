@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test } from 'bun:test';
 import { newOutput, withProfile } from '#src/output.js';
-import { ANSIColor, RGBColor, Profile } from '#src/types.js';
+import { ANSIColor, Profile, RGBColor } from '#src/types.js';
 
 // Mock writer for capturing terminal sequences
 class MockWriter {
@@ -33,8 +33,11 @@ describe('Terminal Control Features', () => {
 
   beforeEach(() => {
     mockWriter = new MockWriter();
-    output = newOutput(mockWriter as any, 
-      (o) => o.assumeTTY = true,
+    output = newOutput(
+      mockWriter as any,
+      (o) => {
+        o.assumeTTY = true;
+      },
       withProfile(Profile.TrueColor)
     );
   });
