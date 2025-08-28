@@ -129,10 +129,12 @@ export function stringWidth(str: string): number {
     if (str[i] === '\x1b' && str[i + 1] === '[') {
       // Skip ANSI escape sequence
       i += 2;
-      while (i < str.length && !/[a-zA-Z]/.test(str[i])) {
+      while (i < str.length) {
+        const char = str[i];
+        if (!char || /[a-zA-Z]/.test(char)) break;
         i++;
       }
-      i++; // Skip the final letter
+      if (i < str.length) i++; // Skip the final letter
       continue;
     }
 
