@@ -14,7 +14,7 @@ function isCombining(codePoint: number): boolean {
     (codePoint >= 0x1ab0 && codePoint <= 0x1aff) || // Combining Diacritical Marks Extended
     (codePoint >= 0x1dc0 && codePoint <= 0x1dff) || // Combining Diacritical Marks Supplement
     (codePoint >= 0x20d0 && codePoint <= 0x20ff) || // Combining Diacritical Marks for Symbols
-    (codePoint >= 0xfe20 && codePoint <= 0xfe2f)    // Combining Half Marks
+    (codePoint >= 0xfe20 && codePoint <= 0xfe2f) // Combining Half Marks
   );
 }
 
@@ -90,7 +90,7 @@ function isWideCharacter(codePoint: number): boolean {
     (codePoint >= 0x1f300 && codePoint <= 0x1f64f) || // Miscellaneous Symbols and Pictographs
     (codePoint >= 0x1f680 && codePoint <= 0x1f6ff) || // Transport and Map Symbols
     (codePoint >= 0x1f910 && codePoint <= 0x1f96b) || // Supplemental Symbols and Pictographs
-    (codePoint >= 0x1f980 && codePoint <= 0x1f9e0)    // Supplemental Symbols and Pictographs
+    (codePoint >= 0x1f980 && codePoint <= 0x1f9e0) // Supplemental Symbols and Pictographs
   );
 }
 
@@ -99,13 +99,13 @@ function isWideCharacter(codePoint: number): boolean {
  */
 function isControlCharacter(codePoint: number): boolean {
   return (
-    (codePoint >= 0 && codePoint <= 0x1f) ||     // C0 Controls
-    (codePoint >= 0x7f && codePoint <= 0x9f) ||  // C1 Controls
-    codePoint === 0x200b ||  // Zero Width Space
-    codePoint === 0x200c ||  // Zero Width Non-Joiner
-    codePoint === 0x200d ||  // Zero Width Joiner
-    codePoint === 0x2060 ||  // Word Joiner
-    codePoint === 0xfeff     // Zero Width No-Break Space
+    (codePoint >= 0 && codePoint <= 0x1f) || // C0 Controls
+    (codePoint >= 0x7f && codePoint <= 0x9f) || // C1 Controls
+    codePoint === 0x200b || // Zero Width Space
+    codePoint === 0x200c || // Zero Width Non-Joiner
+    codePoint === 0x200d || // Zero Width Joiner
+    codePoint === 0x2060 || // Word Joiner
+    codePoint === 0xfeff // Zero Width No-Break Space
   );
 }
 
